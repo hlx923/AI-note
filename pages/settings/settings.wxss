@@ -251,8 +251,8 @@
 .avatar-placeholder {
   width: 200rpx;
   height: 200rpx;
-  background: #F5F5F5;
-  border: 2rpx dashed #CCCCCC;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 2rpx dashed #667eea;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
