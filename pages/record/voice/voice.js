@@ -176,48 +176,25 @@ Page({
     showLoading('正在转写...')
 
     try {
-      // 使用微信同声传译插件
-      const plugin = requirePlugin('WechatSI')
-      const manager = plugin.getRecordRecognitionManager()
+      // 调用语音识别API（这里使用模拟数据，实际应用中需要接入真实的语音识别服务）
+      const result = await APIManager.voiceToText(filePath)
 
-      // 将录音文件转为文字
-      wx.getFileSystemManager().readFile({
-        filePath: filePath,
-        success: (res) => {
-          // 调用语音识别接口
-          plugin.textToSpeech({
-            lang: 'zh_CN',
-            content: res.data,
-            success: (result) => {
-              hideLoading()
-              this.setData({
-                recognizedText: result.retcode === 0 ? result.result : '识别失败'
-              })
-              this.showOrganizePrompt()
-            },
-            fail: (err) => {
-              console.error('语音识别失败', err)
-              hideLoading()
-              // 使用模拟数据（实际应用中应该调用真实API）
-              this.setData({
-                recognizedText: '这是一段模拟的语音转写文本。在实际应用中，这里会显示真实的语音识别结果。'
-              })
-              this.showOrganizePrompt()
-            }
-          })
-        },
-        fail: (err) => {
-          console.error('读取文件失败', err)
-          hideLoading()
-          showToast('转写失败，请重试')
-        }
-      })
+      hideLoading()
+
+      if (result.success) {
+        this.setData({
+          recognizedText: result.text
+        })
+        this.showOrganizePrompt()
+      } else {
+        showToast('转写失败，请重试')
+      }
     } catch (error) {
       console.error('语音转文字错误', error)
       hideLoading()
       // 使用模拟数据
       this.setData({
-        recognizedText: '这是一段模拟的语音转写文本。在实际应用中，这里会显示真实的语音识别结果。'
+        recognizedText: '这是一段模拟的语音转写文本。在实际应用中，这里会显示真实的语音识别结果。您可以在这里记录会议内容、课堂笔记或者日常想法。'
       })
       this.showOrganizePrompt()
     }
