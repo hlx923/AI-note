@@ -1,11 +1,17 @@
 <!-- pages/settings/settings.wxml -->
 <view class="container">
   <!-- 用户信息 -->
-  <view class="user-section" bindtap="handleLogin">
-    <image class="user-avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" wx:if="{{userInfo.avatarUrl}}" />
-    <view class="user-avatar" wx:else>👤</view>
+  <button class="user-section" wx:if="{{!userInfo.nickName}}" bindtap="handleLogin" hover-class="user-section-hover">
+    <view class="user-avatar">👤</view>
     <view class="user-info">
-      <text class="user-name">{{userInfo.nickName || '未登录'}}</text>
+      <text class="user-name">未登录</text>
+      <text class="user-stats">点击登录</text>
+    </view>
+  </button>
+  <view class="user-section" wx:else>
+    <image class="user-avatar" src="{{userInfo.avatarUrl}}" />
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickName}}</text>
       <text class="user-stats">共 {{noteCount}} 条笔记</text>
     </view>
   </view>

@@ -11,6 +11,19 @@
   padding: 60rpx 30rpx;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   margin-bottom: 20rpx;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  text-align: left;
+  line-height: normal;
+}
+
+.user-section::after {
+  border: none;
+}
+
+.user-section-hover {
+  opacity: 0.9;
 }
 
 .user-avatar {
