@@ -99,6 +99,27 @@ Page({
     })
   },
 
+  // 切换账号
+  switchAccount() {
+    wx.showModal({
+      title: '切换账号',
+      content: '切换账号将退出当前登录，是否继续？',
+      confirmText: '确定切换',
+      confirmColor: '#4A90E2',
+      success: (res) => {
+        if (res.confirm) {
+          // 清除当前用户信息
+          wx.removeStorageSync('userInfo')
+          this.setData({
+            userInfo: {}
+          })
+          // 显示登录弹窗
+          this.showLoginModal()
+        }
+      }
+    })
+  },
+
   // 退出登录
   logout() {
     wx.showModal({
