@@ -43,6 +43,12 @@ Page({
       return
     }
 
+    // 格式化时间
+    note.createTimeStr = formatTime(note.createTime)
+    if (note.updateTime) {
+      note.updateTimeStr = formatTime(note.updateTime)
+    }
+
     // 添加到最近查看
     StorageManager.addToRecentViews(this.data.noteId)
 

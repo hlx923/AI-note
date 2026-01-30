@@ -10,8 +10,8 @@
     <text class="note-title">{{note.title}}</text>
 
     <view class="note-meta">
-      <text class="meta-item">创建于 {{formatTime(new Date(note.createTime))}}</text>
-      <text class="meta-item" wx:if="{{note.updateTime}}">更新于 {{formatTime(new Date(note.updateTime))}}</text>
+      <text class="meta-item">创建于 {{note.createTimeStr}}</text>
+      <text class="meta-item" wx:if="{{note.updateTime}}">更新于 {{note.updateTimeStr}}</text>
     </view>
   </view>
 
