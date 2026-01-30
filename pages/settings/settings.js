@@ -60,6 +60,29 @@ Page({
     })
   },
 
+  // 退出登录
+  logout() {
+    wx.showModal({
+      title: '退出登录',
+      content: '确定要退出登录吗？退出后将清除所有账号信息。',
+      confirmText: '确定退出',
+      confirmColor: '#FF4444',
+      success: (res) => {
+        if (res.confirm) {
+          // 清除用户信息
+          wx.removeStorageSync('userInfo')
+          this.setData({
+            userInfo: {}
+          })
+          wx.showToast({
+            title: '已退出登录',
+            icon: 'success'
+          })
+        }
+      }
+    })
+  },
+
   // 加载设置数据
   loadSettings() {
     const notes = StorageManager.getAllNotes()

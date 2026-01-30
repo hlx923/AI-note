@@ -11,6 +11,17 @@
   </view>
 
   <!-- 设置列表 -->
+  <view class="settings-section" wx:if="{{userInfo.nickName}}">
+    <text class="section-title">账号管理</text>
+    <view class="setting-item danger" bindtap="logout">
+      <view class="item-left">
+        <text class="item-icon">🚪</text>
+        <text class="item-label">退出登录</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+  </view>
+
   <view class="settings-section">
     <text class="section-title">标签管理</text>
     <view class="setting-item" bindtap="manageTags">
