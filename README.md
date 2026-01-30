@@ -102,7 +102,8 @@ const apiConfig = wx.getStorageSync('apiConfig') || {
 #### 服务器域名配置
 
 在微信小程序后台配置以下request合法域名：
-- `https://aip.baidubce.com`（百度OCR）
+- `https://aip.baidubce.com`（百度OCR和Access Token）
+- `https://vop.baidu.com`（百度语音识别）
 
 ### 4. 运行项目
 
