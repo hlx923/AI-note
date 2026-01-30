@@ -40,6 +40,7 @@
           placeholder="请输入昵称"
           value="{{tempNickName}}"
           bindinput="onNicknameInput"
+          adjust-position="{{true}}"
         />
         <button class="confirm-login-btn" bindtap="confirmLogin">确认登录</button>
       </view>
