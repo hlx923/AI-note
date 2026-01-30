@@ -358,7 +358,7 @@ Page({
   showAbout() {
     wx.showModal({
       title: 'AI笔记助手',
-      content: '版本：v1.0.0\n\n一款轻量级的场景化笔记应用，支持语音、拍照、手写等多种输入方式，配合AI智能整理，让记录更简单。\n\n开发者：创新竞赛团队\n逆风的蝶出品',
+      content: '版本：v1.0.0\n\n一款轻量级的场景化笔记应用，支持语音、拍照、手写等多种输入方式，配合AI智能整理，让记录更简单。\n\n开发者：逆风的蝶团队',
       showCancel: false,
       confirmText: '知道了'
     })
