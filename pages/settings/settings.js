@@ -10,7 +10,10 @@ Page({
     cacheSize: '0KB',
     baiduConfigured: false,
     showTagModal: false,
-    newTag: ''
+    newTag: '',
+    showLoginModal: false,
+    tempAvatarUrl: '',
+    tempNickName: ''
   },
 
   onLoad() {
@@ -31,39 +34,68 @@ Page({
     }
   },
 
-  // 处理登录
-  handleLogin() {
-    console.log('点击了登录区域')
-    console.log('当前用户信息:', this.data.userInfo)
+  // 显示登录弹窗
+  showLoginModal() {
+    this.setData({
+      showLoginModal: true,
+      tempAvatarUrl: '',
+      tempNickName: ''
+    })
+  },
 
-    // 如果已登录，不做处理
-    if (this.data.userInfo.nickName) {
-      console.log('用户已登录，无需重复登录')
+  // 关闭登录弹窗
+  closeLoginModal() {
+    this.setData({
+      showLoginModal: false,
+      tempAvatarUrl: '',
+      tempNickName: ''
+    })
+  },
+
+  // 选择头像
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail
+    this.setData({
+      tempAvatarUrl: avatarUrl
+    })
+  },
+
+  // 输入昵称
+  onNicknameInput(e) {
+    this.setData({
+      tempNickName: e.detail.value
+    })
+  },
+
+  // 确认登录
+  confirmLogin() {
+    const { tempNickName, tempAvatarUrl } = this.data
+
+    if (!tempNickName || !tempNickName.trim()) {
+      wx.showToast({
+        title: '请输入昵称',
+        icon: 'none'
+      })
       return
     }
 
-    console.log('开始调用 getUserProfile')
+    const userInfo = {
+      nickName: tempNickName.trim(),
+      avatarUrl: tempAvatarUrl || '/images/default-avatar.png'
+    }
 
-    // 使用新版API获取用户信息
-    wx.getUserProfile({
-      desc: '用于完善用户资料',
-      success: (res) => {
-        console.log('获取用户信息成功:', res)
-        const userInfo = res.userInfo
-        this.setData({ userInfo })
-        wx.setStorageSync('userInfo', userInfo)
-        wx.showToast({
-          title: '登录成功',
-          icon: 'success'
-        })
-      },
-      fail: (err) => {
-        console.error('获取用户信息失败', err)
-        wx.showToast({
-          title: '登录取消',
-          icon: 'none'
-        })
-      }
+    this.setData({
+      userInfo,
+      showLoginModal: false,
+      tempAvatarUrl: '',
+      tempNickName: ''
+    })
+
+    wx.setStorageSync('userInfo', userInfo)
+
+    wx.showToast({
+      title: '登录成功',
+      icon: 'success'
     })
   },
 

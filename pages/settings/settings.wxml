@@ -1,18 +1,48 @@
 <!-- pages/settings/settings.wxml -->
 <view class="container">
   <!-- 用户信息 -->
-  <button class="user-section" wx:if="{{!userInfo.nickName}}" bindtap="handleLogin" hover-class="user-section-hover">
+  <view class="user-section" wx:if="{{!userInfo.nickName}}" bindtap="showLoginModal">
     <view class="user-avatar">👤</view>
     <view class="user-info">
       <text class="user-name">未登录</text>
       <text class="user-stats">点击登录</text>
     </view>
-  </button>
+  </view>
   <view class="user-section" wx:else>
     <image class="user-avatar" src="{{userInfo.avatarUrl}}" />
     <view class="user-info">
       <text class="user-name">{{userInfo.nickName}}</text>
       <text class="user-stats">共 {{noteCount}} 条笔记</text>
+    </view>
+  </view>
+
+  <!-- 登录弹窗 -->
+  <view class="modal" wx:if="{{showLoginModal}}" bindtap="closeLoginModal">
+    <view class="modal-content login-modal" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">登录</text>
+        <text class="modal-close" bindtap="closeLoginModal">×</text>
+      </view>
+      <view class="modal-body login-body">
+        <text class="login-tip">请填写你的昵称和头像</text>
+        <view class="avatar-wrapper">
+          <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <image class="avatar-preview" src="{{tempAvatarUrl || '/images/default-avatar.png'}}" wx:if="{{tempAvatarUrl}}" />
+            <view class="avatar-placeholder" wx:else>
+              <text class="avatar-icon">📷</text>
+              <text class="avatar-text">选择头像</text>
+            </view>
+          </button>
+        </view>
+        <input
+          class="nickname-input"
+          type="nickname"
+          placeholder="请输入昵称"
+          value="{{tempNickName}}"
+          bindinput="onNicknameInput"
+        />
+        <button class="confirm-login-btn" bindtap="confirmLogin">确认登录</button>
+      </view>
     </view>
   </view>
 
