@@ -24,27 +24,19 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "首页",
-        "iconPath": "assets/icons/home.png",
-        "selectedIconPath": "assets/icons/home-active.png"
+        "text": "首页"
       },
       {
         "pagePath": "pages/note/list/list",
-        "text": "笔记",
-        "iconPath": "assets/icons/note.png",
-        "selectedIconPath": "assets/icons/note-active.png"
+        "text": "笔记"
       },
       {
         "pagePath": "pages/search/search",
-        "text": "搜索",
-        "iconPath": "assets/icons/search.png",
-        "selectedIconPath": "assets/icons/search-active.png"
+        "text": "搜索"
       },
       {
         "pagePath": "pages/settings/settings",
-        "text": "设置",
-        "iconPath": "assets/icons/settings.png",
-        "selectedIconPath": "assets/icons/settings-active.png"
+        "text": "设置"
       }
     ]
   },
