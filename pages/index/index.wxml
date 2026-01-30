@@ -1,5 +1,5 @@
 <!-- pages/index/index.wxml -->
-<view class="container">
+<view class="container" style="height: 1231rpx; display: block; box-sizing: border-box">
   <!-- 顶部欢迎区 -->
   <view class="welcome-section">
     <text class="welcome-title">AI笔记助手</text>
