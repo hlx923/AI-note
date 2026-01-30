@@ -50,6 +50,7 @@
   "libVersion": "3.5.5",
   "appid": "wx5589992cd068cce9",
   "projectname": "ai-note-assistant",
+  "cloudfunctionRoot": "cloudfunctions/",
   "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",

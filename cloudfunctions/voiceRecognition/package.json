@@ -1,0 +1,10 @@
+{
+  "name": "voiceRecognition",
+  "version": "1.0.0",
+  "description": "语音识别云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "request": "^2.88.2"
+  }
+}
