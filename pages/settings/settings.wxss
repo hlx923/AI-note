@@ -287,6 +287,13 @@
   font-size: 28rpx;
   box-sizing: border-box;
   line-height: 80rpx;
+  transition: all 0.3s ease;
+}
+
+.nickname-input:focus {
+  border-color: #4A90E2;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4rpx rgba(74, 144, 226, 0.1);
 }
 
 .confirm-login-btn {
