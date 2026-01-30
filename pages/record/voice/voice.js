@@ -197,13 +197,16 @@ Page({
 
       hideLoading()
 
+      console.log('云函数返回结果:', result)
+
       if (result.result.success) {
         this.setData({
           recognizedText: result.result.text
         })
         showToast('识别完成', 'success')
       } else {
-        showToast('识别失败，请手动输入')
+        console.error('识别失败原因:', result.result.error)
+        showToast(`识别失败: ${result.result.error || '请手动输入'}`)
         this.setData({
           recognizedText: ''
         })
