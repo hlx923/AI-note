@@ -15,10 +15,49 @@ Page({
 
   onLoad() {
     this.loadSettings()
+    this.loadUserInfo()
   },
 
   onShow() {
     this.loadSettings()
+    this.loadUserInfo()
+  },
+
+  // 加载用户信息
+  loadUserInfo() {
+    const userInfo = wx.getStorageSync('userInfo')
+    if (userInfo) {
+      this.setData({ userInfo })
+    }
+  },
+
+  // 处理登录
+  handleLogin() {
+    // 如果已登录，不做处理
+    if (this.data.userInfo.nickName) {
+      return
+    }
+
+    // 使用新版API获取用户信息
+    wx.getUserProfile({
+      desc: '用于完善用户资料',
+      success: (res) => {
+        const userInfo = res.userInfo
+        this.setData({ userInfo })
+        wx.setStorageSync('userInfo', userInfo)
+        wx.showToast({
+          title: '登录成功',
+          icon: 'success'
+        })
+      },
+      fail: (err) => {
+        console.error('获取用户信息失败', err)
+        wx.showToast({
+          title: '登录取消',
+          icon: 'none'
+        })
+      }
+    })
   },
 
   // 加载设置数据
