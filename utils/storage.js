@@ -1,5 +1,26 @@
 // utils/storage.js - 本地存储管理
 class StorageManager {
+  // 获取当前用户ID
+  static getCurrentUserId() {
+    try {
+      const userInfo = wx.getStorageSync('userInfo')
+      return userInfo && userInfo.userId ? userInfo.userId : null
+    } catch (error) {
+      console.error('获取用户ID失败:', error)
+      return null
+    }
+  }
+
+  // 生成用户专属的存储key
+  static getUserKey(baseKey) {
+    const userId = this.getCurrentUserId()
+    if (!userId) {
+      // 如果没有登录,使用默认key(兼容旧数据)
+      return baseKey
+    }
+    return `${baseKey}_${userId}`
+  }
+
   // 保存笔记
   static saveNote(note) {
     try {
@@ -15,7 +36,8 @@ class StorageManager {
         notes.unshift(note)
       }
 
-      wx.setStorageSync('notes', notes)
+      const notesKey = this.getUserKey('notes')
+      wx.setStorageSync(notesKey, notes)
       return note
     } catch (error) {
       console.error('保存笔记失败:', error)
@@ -26,7 +48,8 @@ class StorageManager {
   // 获取所有笔记
   static getAllNotes() {
     try {
-      return wx.getStorageSync('notes') || []
+      const notesKey = this.getUserKey('notes')
+      return wx.getStorageSync(notesKey) || []
     } catch (error) {
       console.error('获取笔记失败:', error)
       return []
@@ -44,7 +67,8 @@ class StorageManager {
     try {
       const notes = this.getAllNotes()
       const filteredNotes = notes.filter(note => note.id !== id)
-      wx.setStorageSync('notes', filteredNotes)
+      const notesKey = this.getUserKey('notes')
+      wx.setStorageSync(notesKey, filteredNotes)
       return true
     } catch (error) {
       console.error('删除笔记失败:', error)
@@ -92,7 +116,8 @@ class StorageManager {
   // 添加到最近查看
   static addToRecentViews(noteId) {
     try {
-      let recentViews = wx.getStorageSync('recentViews') || []
+      const recentViewsKey = this.getUserKey('recentViews')
+      let recentViews = wx.getStorageSync(recentViewsKey) || []
       recentViews = recentViews.filter(id => id !== noteId)
       recentViews.unshift(noteId)
 
@@ -101,7 +126,7 @@ class StorageManager {
         recentViews = recentViews.slice(0, 10)
       }
 
-      wx.setStorageSync('recentViews', recentViews)
+      wx.setStorageSync(recentViewsKey, recentViews)
     } catch (error) {
       console.error('添加最近查看失败:', error)
     }
@@ -110,7 +135,8 @@ class StorageManager {
   // 获取最近查看的笔记
   static getRecentViews() {
     try {
-      const recentViewIds = wx.getStorageSync('recentViews') || []
+      const recentViewsKey = this.getUserKey('recentViews')
+      const recentViewIds = wx.getStorageSync(recentViewsKey) || []
       const notes = this.getAllNotes()
       return recentViewIds
         .map(id => notes.find(note => note.id === id))
@@ -129,7 +155,8 @@ class StorageManager {
   // 获取所有标签
   static getAllTags() {
     try {
-      return wx.getStorageSync('tags') || ['学习', '工作', '生活', '灵感']
+      const tagsKey = this.getUserKey('tags')
+      return wx.getStorageSync(tagsKey) || ['学习', '工作', '生活', '灵感']
     } catch (error) {
       return ['学习', '工作', '生活', '灵感']
     }
@@ -141,7 +168,8 @@ class StorageManager {
       const tags = this.getAllTags()
       if (!tags.includes(tag)) {
         tags.push(tag)
-        wx.setStorageSync('tags', tags)
+        const tagsKey = this.getUserKey('tags')
+        wx.setStorageSync(tagsKey, tags)
       }
       return tags
     } catch (error) {

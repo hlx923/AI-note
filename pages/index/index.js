@@ -47,6 +47,7 @@ Page({
 
   // 跳转到语音速记
   goToVoiceRecord() {
+    if (!this.checkLogin()) return
     wx.navigateTo({
       url: '/pages/record/voice/voice'
     })
@@ -54,6 +55,7 @@ Page({
 
   // 跳转到拍照记笔记
   goToPhotoRecord() {
+    if (!this.checkLogin()) return
     wx.navigateTo({
       url: '/pages/record/photo/photo'
     })
@@ -61,9 +63,32 @@ Page({
 
   // 跳转到手写涂鸦
   goToHandwrite() {
+    if (!this.checkLogin()) return
     wx.navigateTo({
       url: '/pages/record/handwrite/handwrite'
     })
+  },
+
+  // 检查登录状态
+  checkLogin() {
+    const userInfo = wx.getStorageSync('userInfo')
+    if (!userInfo || !userInfo.userId) {
+      wx.showModal({
+        title: '需要登录',
+        content: '请先登录后再创建笔记',
+        confirmText: '去登录',
+        confirmColor: '#4A90E2',
+        success: (res) => {
+          if (res.confirm) {
+            wx.switchTab({
+              url: '/pages/settings/settings'
+            })
+          }
+        }
+      })
+      return false
+    }
+    return true
   },
 
   // 跳转到笔记详情

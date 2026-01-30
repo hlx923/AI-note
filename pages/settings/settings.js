@@ -79,9 +79,14 @@ Page({
       return
     }
 
+    // 生成唯一的用户ID
+    const userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
     const userInfo = {
+      userId: userId,
       nickName: tempNickName.trim(),
-      avatarUrl: tempAvatarUrl || '/images/default-avatar.png'
+      avatarUrl: tempAvatarUrl || '/images/default-avatar.png',
+      createTime: Date.now()
     }
 
     this.setData({
@@ -97,6 +102,9 @@ Page({
       title: '登录成功',
       icon: 'success'
     })
+
+    // 重新加载设置数据,显示当前用户的数据
+    this.loadSettings()
   },
 
   // 切换账号
@@ -111,7 +119,10 @@ Page({
           // 清除当前用户信息
           wx.removeStorageSync('userInfo')
           this.setData({
-            userInfo: {}
+            userInfo: {},
+            noteCount: 0,
+            tags: [],
+            cacheSize: '0KB'
           })
           // 显示登录弹窗
           this.showLoginModal()
@@ -211,7 +222,8 @@ Page({
     }
 
     const tags = [...this.data.tags, tag]
-    wx.setStorageSync('tags', tags)
+    const tagsKey = StorageManager.getUserKey('tags')
+    wx.setStorageSync(tagsKey, tags)
     this.setData({
       tags: tags,
       newTag: ''
@@ -231,7 +243,8 @@ Page({
       success: (res) => {
         if (res.confirm) {
           const tags = this.data.tags.filter(t => t !== tag)
-          wx.setStorageSync('tags', tags)
+          const tagsKey = StorageManager.getUserKey('tags')
+          wx.setStorageSync(tagsKey, tags)
           this.setData({ tags: tags })
           wx.showToast({
             title: '删除成功',
@@ -321,10 +334,11 @@ Page({
       success: (res) => {
         if (res.confirm) {
           try {
-            // 清除搜索历史
-            wx.removeStorageSync('searchHistory')
-            // 清除最近浏览
-            wx.removeStorageSync('recentViews')
+            // 清除当前用户的搜索历史和最近浏览
+            const searchHistoryKey = StorageManager.getUserKey('searchHistory')
+            const recentViewsKey = StorageManager.getUserKey('recentViews')
+            wx.removeStorageSync(searchHistoryKey)
+            wx.removeStorageSync(recentViewsKey)
 
             wx.showToast({
               title: '清除成功',
@@ -361,7 +375,14 @@ Page({
             success: (res2) => {
               if (res2.confirm) {
                 try {
-                  wx.clearStorageSync()
+                  // 只清除当前用户的数据
+                  const userId = StorageManager.getCurrentUserId()
+                  if (userId) {
+                    wx.removeStorageSync(`notes_${userId}`)
+                    wx.removeStorageSync(`tags_${userId}`)
+                    wx.removeStorageSync(`recentViews_${userId}`)
+                    wx.removeStorageSync(`searchHistory_${userId}`)
+                  }
                   wx.showToast({
                     title: '已清空',
                     icon: 'success'
