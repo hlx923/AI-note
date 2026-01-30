@@ -46,14 +46,8 @@
     </view>
   </view>
 
-  <!-- 空状态 -->
-  <view class="empty-state" wx:if="{{recentNotes.length === 0}}">
-    <text class="empty-icon">📝</text>
-    <text class="empty-text">还没有笔记，快来创建第一条吧！</text>
-  </view>
-
   <!-- 统计信息 -->
-  <view class="stats-section">
+  <view class="stats-section" wx:if="{{recentNotes.length === 0}}">
     <view class="stat-item">
       <text class="stat-number">{{totalNotes}}</text>
       <text class="stat-label">笔记总数</text>
@@ -66,5 +60,11 @@
       <text class="stat-number">{{totalTags}}</text>
       <text class="stat-label">标签数量</text>
     </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{recentNotes.length === 0}}">
+    <text class="empty-icon">📝</text>
+    <text class="empty-text">还没有笔记，快来创建第一条吧！</text>
   </view>
 </view>
