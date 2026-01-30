@@ -1,5 +1,23 @@
 <!-- pages/record/photo/photo.wxml -->
 <view class="container">
+  <!-- 模式选择器 -->
+  <view class="mode-selector">
+    <view class="mode-current" bindtap="toggleModeSelector">
+      <text class="mode-label">{{mode === 'mistake' ? '错题本模式' : '普通模式'}}</text>
+      <text class="mode-icon">{{showModeSelector ? '▲' : '▼'}}</text>
+    </view>
+    <view class="mode-options" wx:if="{{showModeSelector}}">
+      <view class="mode-option" bindtap="selectMode" data-mode="normal">
+        <text class="option-name">普通模式</text>
+        <text class="option-desc">识别文字并AI规整</text>
+      </view>
+      <view class="mode-option" bindtap="selectMode" data-mode="mistake">
+        <text class="option-name">错题本模式</text>
+        <text class="option-desc">自动提取题目和解析</text>
+      </view>
+    </view>
+  </view>
+
   <!-- 拍照区域 -->
   <view class="photo-section" wx:if="{{photos.length === 0}}">
     <view class="photo-placeholder">
@@ -53,8 +71,8 @@
     </view>
   </view>
 
-  <!-- 识别结果 -->
-  <view class="result-section" wx:if="{{recognizedText}}">
+  <!-- 识别结果 - 普通模式 -->
+  <view class="result-section" wx:if="{{recognizedText && mode === 'normal'}}">
     <view class="result-header">
       <text class="result-title">识别结果</text>
       <text class="result-length">{{recognizedText.length}}字</text>
@@ -76,6 +94,106 @@
       </button>
       <button class="btn-secondary" bindtap="manualSave">
         直接保存
+      </button>
+    </view>
+  </view>
+
+  <!-- 错题编辑 - 错题本模式 -->
+  <view class="mistake-section" wx:if="{{questionData && mode === 'mistake'}}">
+    <view class="mistake-header">
+      <text class="mistake-title">错题信息</text>
+    </view>
+
+    <view class="mistake-form">
+      <!-- 学科选择 -->
+      <view class="form-item">
+        <text class="form-label">学科</text>
+        <view class="subject-selector">
+          <view
+            class="subject-item {{questionData.subject === '数学' ? 'active' : ''}}"
+            bindtap="updateQuestionField"
+            data-field="subject"
+            data-value="数学"
+          >数学</view>
+          <view
+            class="subject-item {{questionData.subject === '语文' ? 'active' : ''}}"
+            bindtap="updateQuestionField"
+            data-field="subject"
+            data-value="语文"
+          >语文</view>
+          <view
+            class="subject-item {{questionData.subject === '英语' ? 'active' : ''}}"
+            bindtap="updateQuestionField"
+            data-field="subject"
+            data-value="英语"
+          >英语</view>
+          <view
+            class="subject-item {{questionData.subject === '物理' ? 'active' : ''}}"
+            bindtap="updateQuestionField"
+            data-field="subject"
+            data-value="物理"
+          >物理</view>
+          <view
+            class="subject-item {{questionData.subject === '化学' ? 'active' : ''}}"
+            bindtap="updateQuestionField"
+            data-field="subject"
+            data-value="化学"
+          >化学</view>
+          <view
+            class="subject-item {{questionData.subject === '其他' ? 'active' : ''}}"
+            bindtap="updateQuestionField"
+            data-field="subject"
+            data-value="其他"
+          >其他</view>
+        </view>
+      </view>
+
+      <!-- 题目 -->
+      <view class="form-item">
+        <text class="form-label">题目</text>
+        <textarea
+          class="form-textarea"
+          value="{{questionData.question}}"
+          placeholder="请输入题目内容"
+          bindinput="updateQuestionField"
+          data-field="question"
+          maxlength="-1"
+          auto-height
+        />
+      </view>
+
+      <!-- 答案 -->
+      <view class="form-item">
+        <text class="form-label">答案</text>
+        <textarea
+          class="form-textarea"
+          value="{{questionData.answer}}"
+          placeholder="请输入正确答案"
+          bindinput="updateQuestionField"
+          data-field="answer"
+          maxlength="-1"
+          auto-height
+        />
+      </view>
+
+      <!-- 解析 -->
+      <view class="form-item">
+        <text class="form-label">解析</text>
+        <textarea
+          class="form-textarea"
+          value="{{questionData.analysis}}"
+          placeholder="请输入解题思路和分析"
+          bindinput="updateQuestionField"
+          data-field="analysis"
+          maxlength="-1"
+          auto-height
+        />
+      </view>
+    </view>
+
+    <view class="mistake-actions">
+      <button class="btn-primary" bindtap="saveMistake">
+        保存错题
       </button>
     </view>
   </view>

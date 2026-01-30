@@ -12,11 +12,21 @@ Page({
     recordTime: 0,
     recognizedText: '',
     timer: null,
-    tempFilePath: ''
+    tempFilePath: '',
+    mode: 'normal', // normal: 普通模式, meeting: 会议纪要模式
+    showModeSelector: false,
+    speakers: [], // 说话人列表
+    showSpeakerModal: false,
+    currentSpeaker: '',
+    newSpeakerName: ''
   },
 
   onLoad() {
     this.initRecorder()
+    // 检查是否从会议纪要入口进入
+    const mode = wx.getStorageSync('voiceMode') || 'normal'
+    this.setData({ mode })
+    wx.removeStorageSync('voiceMode')
   },
 
   onUnload() {

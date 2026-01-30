@@ -222,6 +222,73 @@ class APIManager {
       return { success: false, error: error.message }
     }
   }
+
+  // 分析错题（提取题目、答案、解析）
+  static async analyzeMistake(text) {
+    try {
+      // 简单的规则匹配提取错题结构
+      let question = ''
+      let answer = ''
+      let analysis = ''
+      let subject = '其他'
+
+      // 尝试提取题目（通常在开头或"题目"关键词后）
+      const questionMatch = text.match(/(?:题目|问题|题)[:：]?\s*(.+?)(?=答案|解析|$)/s)
+      if (questionMatch) {
+        question = questionMatch[1].trim()
+      } else {
+        // 如果没有明确标记，取第一段作为题目
+        const lines = text.split('\n').filter(line => line.trim())
+        question = lines[0] || text
+      }
+
+      // 尝试提取答案
+      const answerMatch = text.match(/(?:答案|正确答案|参考答案)[:：]?\s*(.+?)(?=解析|分析|$)/s)
+      if (answerMatch) {
+        answer = answerMatch[1].trim()
+      }
+
+      // 尝试提取解析
+      const analysisMatch = text.match(/(?:解析|分析|解题思路|详解)[:：]?\s*(.+?)$/s)
+      if (analysisMatch) {
+        analysis = analysisMatch[1].trim()
+      }
+
+      // 智能判断学科
+      const subjectKeywords = {
+        '数学': ['函数', '方程', '几何', '代数', '三角', '微积分', '导数', '积分', '矩阵', '向量', '计算', '求解'],
+        '语文': ['文言文', '诗歌', '作文', '阅读理解', '修辞', '成语', '古诗', '散文', '小说'],
+        '英语': ['grammar', 'vocabulary', 'reading', 'writing', 'listening', '语法', '词汇', '阅读', '写作'],
+        '物理': ['力学', '电学', '光学', '热学', '声学', '运动', '能量', '电路', '磁场', '波动'],
+        '化学': ['化学式', '反应', '元素', '分子', '原子', '溶液', '酸碱', '氧化', '还原', '有机']
+      }
+
+      for (const [subjectName, keywords] of Object.entries(subjectKeywords)) {
+        if (keywords.some(keyword => text.includes(keyword))) {
+          subject = subjectName
+          break
+        }
+      }
+
+      return {
+        success: true,
+        question: question || text,
+        answer: answer,
+        analysis: analysis,
+        subject: subject
+      }
+    } catch (error) {
+      console.error('错题分析错误:', error)
+      return {
+        success: false,
+        error: error.message,
+        question: text,
+        answer: '',
+        analysis: '',
+        subject: '其他'
+      }
+    }
+  }
 }
 
 module.exports = APIManager

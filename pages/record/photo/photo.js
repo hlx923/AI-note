@@ -8,10 +8,38 @@ Page({
     photos: [],
     maxPhotos: 3,
     recognizedText: '',
-    isProcessing: false
+    isProcessing: false,
+    mode: 'normal', // normal: 普通模式, mistake: 错题本模式
+    showModeSelector: false,
+    questionData: null // 错题数据: {question, answer, analysis, subject}
   },
 
   onLoad() {
+    // 检查是否从错题本入口进入
+    const mode = wx.getStorageSync('photoMode') || 'normal'
+    this.setData({ mode })
+    wx.removeStorageSync('photoMode')
+  },
+
+  // 切换模式
+  toggleModeSelector() {
+    this.setData({ showModeSelector: !this.data.showModeSelector })
+  },
+
+  // 选择模式
+  selectMode(e) {
+    const mode = e.currentTarget.dataset.mode
+    this.setData({
+      mode,
+      showModeSelector: false,
+      photos: [],
+      recognizedText: '',
+      questionData: null
+    })
+    wx.showToast({
+      title: mode === 'mistake' ? '已切换到错题本模式' : '已切换到普通模式',
+      icon: 'success'
+    })
   },
 
   // 拍照
@@ -152,9 +180,108 @@ Page({
 
   // 显示规整提示
   async showOrganizePrompt() {
-    const confirm = await showConfirm('识别完成，是否进行AI规整？', '提示')
-    if (confirm) {
-      this.organizeNote()
+    if (this.data.mode === 'mistake') {
+      // 错题本模式,直接进行AI分析
+      this.analyzeMistake()
+    } else {
+      // 普通模式
+      const confirm = await showConfirm('识别完成，是否进行AI规整？', '提示')
+      if (confirm) {
+        this.organizeNote()
+      }
+    }
+  },
+
+  // 分析错题
+  async analyzeMistake() {
+    showLoading('正在分析错题...')
+
+    try {
+      // 调用AI分析错题结构
+      const result = await APIManager.analyzeMistake(this.data.recognizedText)
+      hideLoading()
+
+      if (result.success) {
+        this.setData({
+          questionData: {
+            question: result.question || this.data.recognizedText,
+            answer: result.answer || '',
+            analysis: result.analysis || '',
+            subject: result.subject || '其他'
+          }
+        })
+
+        // 显示错题编辑界面
+        wx.showToast({
+          title: '分析完成',
+          icon: 'success'
+        })
+      } else {
+        // 分析失败,使用默认结构
+        this.setData({
+          questionData: {
+            question: this.data.recognizedText,
+            answer: '',
+            analysis: '',
+            subject: '其他'
+          }
+        })
+      }
+    } catch (error) {
+      console.error('分析错题失败', error)
+      hideLoading()
+
+      // 使用默认结构
+      this.setData({
+        questionData: {
+          question: this.data.recognizedText,
+          answer: '',
+          analysis: '',
+          subject: '其他'
+        }
+      })
+    }
+  },
+
+  // 更新错题字段
+  updateQuestionField(e) {
+    const field = e.currentTarget.dataset.field
+    const value = e.detail.value || e.currentTarget.dataset.value
+    this.setData({
+      [`questionData.${field}`]: value
+    })
+  },
+
+  // 保存错题
+  async saveMistake() {
+    const { questionData, photos } = this.data
+
+    if (!questionData || !questionData.question.trim()) {
+      showToast('请输入题目内容')
+      return
+    }
+
+    const note = {
+      title: `【错题】${questionData.subject} - ${questionData.question.substring(0, 15)}...`,
+      content: `题目：\n${questionData.question}\n\n答案：\n${questionData.answer}\n\n解析：\n${questionData.analysis}`,
+      tag: '错题本',
+      keywords: [questionData.subject, '错题'],
+      type: 'mistake',
+      images: photos,
+      mistakeData: questionData
+    }
+
+    const savedNote = StorageManager.saveNote(note)
+
+    if (savedNote) {
+      showToast('保存成功', 'success')
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/note/detail/detail?id=${savedNote.id}`
+        })
+      }, 1500)
+    } else {
+      showToast('保存失败')
     }
   },
 
