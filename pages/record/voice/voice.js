@@ -4,6 +4,8 @@ const APIManager = require('../../../utils/api.js')
 const { showToast, showLoading, hideLoading, showConfirm } = require('../../../utils/util.js')
 
 const recorderManager = wx.getRecorderManager()
+const plugin = requirePlugin("WechatSI")
+const manager = plugin.getRecordRecognitionManager()
 
 Page({
   data: {
@@ -17,6 +19,7 @@ Page({
 
   onLoad() {
     this.initRecorder()
+    this.initRecognition()
   },
 
   onUnload() {
@@ -24,36 +27,45 @@ Page({
       clearInterval(this.data.timer)
     }
     recorderManager.stop()
+    manager.stop()
   },
 
-  // 初始化录音管理器
+  // 初始化语音识别
+  initRecognition() {
+    // 识别开始
+    manager.onStart = () => {
+      console.log('语音识别开始')
+    }
+
+    // 识别结束
+    manager.onStop = (res) => {
+      console.log('语音识别结束', res)
+    }
+
+    // 识别结果
+    manager.onRecognize = (res) => {
+      console.log('识别中:', res.result)
+      // 实时显示识别结果
+      this.setData({
+        recognizedText: res.result
+      })
+    }
+
+    // 识别错误
+    manager.onError = (err) => {
+      console.error('识别错误', err)
+      showToast('识别失败，请重试')
+    }
+  },
+
+  // 初始化录音管理器（保留用于兼容性）
   initRecorder() {
-    // 录音开始
-    recorderManager.onStart(() => {
-      console.log('录音开始')
-      this.startTimer()
-    })
-
-    // 录音暂停
-    recorderManager.onPause(() => {
-      console.log('录音暂停')
-      this.pauseTimer()
-    })
-
-    // 录音继续
-    recorderManager.onResume(() => {
-      console.log('录音继续')
-      this.resumeTimer()
-    })
-
     // 录音停止
     recorderManager.onStop((res) => {
       console.log('录音停止', res)
       this.setData({
         tempFilePath: res.tempFilePath
       })
-      this.stopTimer()
-      this.convertVoiceToText(res.tempFilePath)
     })
 
     // 录音错误
@@ -69,17 +81,18 @@ Page({
     wx.authorize({
       scope: 'scope.record',
       success: () => {
-        recorderManager.start({
-          duration: 60000,
-          format: 'mp3',
-          sampleRate: 16000,
-          numberOfChannels: 1,
-          encodeBitRate: 48000
+        // 使用微信同声传译插件进行实时语音识别
+        manager.start({
+          lang: 'zh_CN', // 中文识别
+          duration: 60000 // 最长60秒
         })
+
         this.setData({
           isRecording: true,
-          isPaused: false
+          isPaused: false,
+          recognizedText: ''
         })
+        this.startTimer()
       },
       fail: () => {
         wx.showModal({
@@ -95,29 +108,32 @@ Page({
     })
   },
 
-  // 暂停录音
+  // 暂停录音（微信同声传译插件不支持暂停，改为停止）
   pauseRecord() {
-    recorderManager.pause()
-    this.setData({
-      isPaused: true
-    })
+    showToast('语音识别不支持暂停，请直接完成录音')
   },
 
-  // 继续录音
+  // 继续录音（不支持）
   resumeRecord() {
-    recorderManager.resume()
-    this.setData({
-      isPaused: false
-    })
+    showToast('语音识别不支持暂停，请重新开始录音')
   },
 
   // 停止录音
   stopRecord() {
-    recorderManager.stop()
+    manager.stop()
     this.setData({
       isRecording: false,
-      isPaused: false
+      isPaused: false,
+      tempFilePath: 'completed' // 标记录音完成
     })
+    this.stopTimer()
+
+    // 检查是否有识别结果
+    if (this.data.recognizedText) {
+      showToast('识别完成', 'success')
+    } else {
+      showToast('未识别到内容，请手动输入', 'none')
+    }
   },
 
   // 删除当前录音
@@ -132,6 +148,7 @@ Page({
   // 重置录音器
   resetRecorder() {
     this.stopTimer()
+    manager.stop()
     this.setData({
       isRecording: false,
       isPaused: false,
@@ -168,35 +185,6 @@ Page({
     if (this.data.timer) {
       clearInterval(this.data.timer)
       this.data.timer = null
-    }
-  },
-
-  // 语音转文字
-  async convertVoiceToText(filePath) {
-    showLoading('录音完成')
-
-    try {
-      // 调用语音识别API（返回空文本，让用户手动输入）
-      const result = await APIManager.voiceToText(filePath)
-
-      hideLoading()
-
-      if (result.success) {
-        this.setData({
-          recognizedText: result.text
-        })
-        // 不自动弹出提示，让用户先输入内容
-        showToast('请输入录音内容', 'none')
-      } else {
-        showToast('录音失败，请重试')
-      }
-    } catch (error) {
-      console.error('语音转文字错误', error)
-      hideLoading()
-      this.setData({
-        recognizedText: ''
-      })
-      showToast('请输入录音内容', 'none')
     }
   },
 

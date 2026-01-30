@@ -30,12 +30,6 @@
 
     <!-- 录音中 -->
     <view wx:if="{{isRecording}}" class="btn-group">
-      <button class="btn-secondary" bindtap="pauseRecord" wx:if="{{!isPaused}}">
-        暂停
-      </button>
-      <button class="btn-secondary" bindtap="resumeRecord" wx:if="{{isPaused}}">
-        继续
-      </button>
       <button class="btn-primary" bindtap="stopRecord">
         完成
       </button>
@@ -74,12 +68,12 @@
   </view>
 
   <!-- 使用提示 -->
-  <view class="tips-section" wx:if="{{!isRecording && !recognizedText}}">
+  <view class="tips-section" wx:if="{{!isRecording && !tempFilePath}}">
     <view class="tips-title">💡 使用提示</view>
     <view class="tips-list">
       <view class="tip-item">• 支持最长60秒录音</view>
-      <view class="tip-item">• 可随时暂停/继续录音</view>
-      <view class="tip-item">• 录音完成后自动转写文字</view>
+      <view class="tip-item">• 使用微信同声传译实时识别</view>
+      <view class="tip-item">• 录音时会实时显示识别文字</view>
       <view class="tip-item">• AI自动规整并分类笔记</view>
     </view>
   </view>
