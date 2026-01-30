@@ -7,8 +7,8 @@ cloud.init({
 })
 
 // 百度语音识别配置
-const BAIDU_API_KEY = 'GZGnYAGwGfQQGvGZvAjGZvGZGZGZGZGZ'
-const BAIDU_SECRET_KEY = 'GZGZGZGZGZGZGZGZGZGZGZGZGZGZGZGv'
+const BAIDU_API_KEY = '33heSlTOAQ4MJlGAeNK9amxl'
+const BAIDU_SECRET_KEY = 'hFqfz69kt6El2ivTEfzQ45W7bcfGYNyP'
 
 // 获取百度Access Token
 function getBaiduAccessToken() {
