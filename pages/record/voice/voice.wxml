@@ -1,0 +1,86 @@
+<!-- pages/record/voice/voice.wxml -->
+<view class="container">
+  <!-- 录音状态显示 -->
+  <view class="record-status">
+    <view class="record-circle {{isRecording ? 'recording' : ''}}">
+      <view class="record-icon">🎤</view>
+    </view>
+
+    <view class="record-time">{{formatTime(recordTime)}}</view>
+
+    <view class="record-hint" wx:if="{{!isRecording}}">
+      点击下方按钮开始录音
+    </view>
+    <view class="record-hint" wx:if="{{isRecording && !isPaused}}">
+      正在录音中...
+    </view>
+    <view class="record-hint" wx:if="{{isPaused}}">
+      录音已暂停
+    </view>
+  </view>
+
+  <!-- 录音控制按钮 -->
+  <view class="control-buttons">
+    <!-- 未开始录音 -->
+    <view wx:if="{{!isRecording}}" class="btn-group">
+      <button class="btn-primary btn-large" bindtap="startRecord">
+        开始录音
+      </button>
+    </view>
+
+    <!-- 录音中 -->
+    <view wx:if="{{isRecording}}" class="btn-group">
+      <button class="btn-secondary" bindtap="pauseRecord" wx:if="{{!isPaused}}">
+        暂停
+      </button>
+      <button class="btn-secondary" bindtap="resumeRecord" wx:if="{{isPaused}}">
+        继续
+      </button>
+      <button class="btn-primary" bindtap="stopRecord">
+        完成
+      </button>
+      <button class="btn-ghost" bindtap="deleteRecord">
+        删除
+      </button>
+    </view>
+  </view>
+
+  <!-- 识别结果 -->
+  <view class="result-section" wx:if="{{recognizedText}}">
+    <view class="result-header">
+      <text class="result-title">转写结果</text>
+      <text class="result-length">{{recognizedText.length}}字</text>
+    </view>
+
+    <view class="result-content">
+      <textarea
+        class="result-textarea"
+        value="{{recognizedText}}"
+        placeholder="转写结果将显示在这里"
+        maxlength="-1"
+        auto-height
+        disabled
+      />
+    </view>
+
+    <view class="result-actions">
+      <button class="btn-primary" bindtap="organizeNote">
+        AI规整并保存
+      </button>
+      <button class="btn-secondary" bindtap="manualSave">
+        直接保存
+      </button>
+    </view>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="tips-section" wx:if="{{!isRecording && !recognizedText}}">
+    <view class="tips-title">💡 使用提示</view>
+    <view class="tips-list">
+      <view class="tip-item">• 支持最长60秒录音</view>
+      <view class="tip-item">• 可随时暂停/继续录音</view>
+      <view class="tip-item">• 录音完成后自动转写文字</view>
+      <view class="tip-item">• AI自动规整并分类笔记</view>
+    </view>
+  </view>
+</view>

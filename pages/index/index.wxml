@@ -1,0 +1,70 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <!-- 顶部欢迎区 -->
+  <view class="welcome-section">
+    <text class="welcome-title">AI笔记助手</text>
+    <text class="welcome-subtitle">轻量录入 · 智能规整 · 即时检索</text>
+  </view>
+
+  <!-- 快速录入入口 -->
+  <view class="quick-actions">
+    <view class="action-card" bindtap="goToVoiceRecord">
+      <view class="action-icon">🎤</view>
+      <text class="action-title">语音速记</text>
+      <text class="action-desc">一句话快速记录</text>
+    </view>
+
+    <view class="action-card" bindtap="goToPhotoRecord">
+      <view class="action-icon">📷</view>
+      <text class="action-title">拍照记笔记</text>
+      <text class="action-desc">OCR智能识别</text>
+    </view>
+
+    <view class="action-card" bindtap="goToHandwrite">
+      <view class="action-icon">✍️</view>
+      <text class="action-title">手写涂鸦</text>
+      <text class="action-desc">手写自动规整</text>
+    </view>
+  </view>
+
+  <!-- 最近查看/编辑 -->
+  <view class="recent-section" wx:if="{{recentNotes.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">最近查看</text>
+      <text class="section-more" bindtap="goToNoteList">查看全部 ></text>
+    </view>
+
+    <view class="note-list">
+      <view class="note-item" wx:for="{{recentNotes}}" wx:key="id" bindtap="goToNoteDetail" data-id="{{item.id}}">
+        <view class="note-header">
+          <text class="note-title">{{item.title}}</text>
+          <view class="note-tag">{{item.tag}}</view>
+        </view>
+        <text class="note-content">{{item.content}}</text>
+        <text class="note-time">{{item.timeAgo}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{recentNotes.length === 0}}">
+    <text class="empty-icon">📝</text>
+    <text class="empty-text">还没有笔记，快来创建第一条吧！</text>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stat-item">
+      <text class="stat-number">{{totalNotes}}</text>
+      <text class="stat-label">笔记总数</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-number">{{todayNotes}}</text>
+      <text class="stat-label">今日新增</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-number">{{totalTags}}</text>
+      <text class="stat-label">标签数量</text>
+    </view>
+  </view>
+</view>

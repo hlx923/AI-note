@@ -1,0 +1,94 @@
+<!-- pages/note/detail/detail.wxml -->
+<view class="container" wx:if="{{note}}">
+  <!-- 笔记头部 -->
+  <view class="note-header">
+    <view class="header-top">
+      <view class="note-tag">{{note.tag}}</view>
+      <view class="note-lock" wx:if="{{note.isLocked}}">🔒</view>
+    </view>
+
+    <text class="note-title">{{note.title}}</text>
+
+    <view class="note-meta">
+      <text class="meta-item">创建于 {{formatTime(new Date(note.createTime))}}</text>
+      <text class="meta-item" wx:if="{{note.updateTime}}">更新于 {{formatTime(new Date(note.updateTime))}}</text>
+    </view>
+  </view>
+
+  <!-- 笔记内容 -->
+  <view class="note-content-section">
+    <view wx:if="{{!isEditing}}">
+      <text class="note-content">{{note.content}}</text>
+    </view>
+
+    <view wx:if="{{isEditing}}">
+      <textarea
+        class="note-textarea"
+        value="{{editContent}}"
+        placeholder="请输入笔记内容"
+        maxlength="-1"
+        auto-height
+        bindinput="onContentInput"
+      />
+    </view>
+  </view>
+
+  <!-- 图片 -->
+  <view class="note-images" wx:if="{{note.images && note.images.length > 0}}">
+    <view class="images-title">相关图片</view>
+    <view class="images-grid">
+      <image
+        class="image-item"
+        wx:for="{{note.images}}"
+        wx:key="index"
+        src="{{item}}"
+        mode="aspectFill"
+        bindtap="previewImage"
+        data-index="{{index}}"
+      />
+    </view>
+  </view>
+
+  <!-- 关键词 -->
+  <view class="note-keywords" wx:if="{{note.keywords && note.keywords.length > 0}}">
+    <view class="keywords-title">关键词</view>
+    <view class="keywords-list">
+      <view class="keyword-item" wx:for="{{note.keywords}}" wx:key="index">
+        {{item}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 待办事项 -->
+  <view class="note-todos" wx:if="{{note.todos && note.todos.length > 0}}">
+    <view class="todos-title">待办事项</view>
+    <view class="todos-list">
+      <view class="todo-item" wx:for="{{note.todos}}" wx:key="index">
+        <text class="todo-number">{{index + 1}}.</text>
+        <text class="todo-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <view wx:if="{{!isEditing}}" class="button-group">
+      <button class="btn-secondary" bindtap="startEdit">编辑</button>
+      <button class="btn-secondary" bindtap="copyContent">复制</button>
+      <button class="btn-secondary" bindtap="exportNote">导出</button>
+      <button class="btn-secondary" bindtap="shareToWeChat">分享</button>
+      <button class="btn-secondary" bindtap="lockNote" wx:if="{{!note.isLocked}}">锁定</button>
+      <button class="btn-ghost" bindtap="deleteNote">删除</button>
+    </view>
+
+    <view wx:if="{{isEditing}}" class="button-group">
+      <button class="btn-primary" bindtap="saveEdit">保存</button>
+      <button class="btn-ghost" bindtap="cancelEdit">取消</button>
+    </view>
+  </view>
+</view>
+
+<view class="empty-state" wx:if="{{!note}}">
+  <text class="empty-icon">📝</text>
+  <text class="empty-text">笔记不存在</text>
+</view>

@@ -1,0 +1,287 @@
+/* pages/note/list/list.wxss */
+.container {
+  min-height: 100vh;
+  background: #F5F5F5;
+  padding-bottom: 120rpx;
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  padding: 20rpx 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.tag-scroll {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.tag-list {
+  display: inline-flex;
+  gap: 16rpx;
+}
+
+.tag-item {
+  display: inline-block;
+  padding: 12rpx 24rpx;
+  background: #F5F5F5;
+  color: #666;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.tag-item.active {
+  background: #4A90E2;
+  color: #FFFFFF;
+}
+
+.filter-icon {
+  margin-left: 20rpx;
+  padding: 12rpx 20rpx;
+  background: #F5F5F5;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.note-list {
+  padding: 0 30rpx;
+}
+
+.note-item {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+}
+
+.note-item:active {
+  transform: scale(0.98);
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.note-title {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-lock {
+  font-size: 28rpx;
+  margin-left: 12rpx;
+}
+
+.note-content {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 12rpx;
+}
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.note-tag {
+  padding: 6rpx 16rpx;
+  background: #E3F2FD;
+  color: #4A90E2;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+}
+
+.note-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.note-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.keyword-tag {
+  padding: 4rpx 12rpx;
+  background: #F0F0F0;
+  color: #666;
+  border-radius: 6rpx;
+  font-size: 22rpx;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 200rpx 40rpx;
+}
+
+.empty-icon {
+  display: block;
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  display: block;
+  font-size: 28rpx;
+  color: #999;
+}
+
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: 120rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(74, 144, 226, 0.4);
+  z-index: 100;
+}
+
+.fab-icon {
+  font-size: 56rpx;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.filter-menu {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 40rpx;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.menu-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 32rpx;
+  text-align: center;
+}
+
+.filter-section {
+  margin-bottom: 32rpx;
+}
+
+.filter-label {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.filter-options {
+  display: flex;
+  gap: 16rpx;
+}
+
+.filter-option {
+  flex: 1;
+  padding: 16rpx;
+  background: #F5F5F5;
+  color: #666;
+  border-radius: 12rpx;
+  text-align: center;
+  font-size: 26rpx;
+}
+
+.filter-option.active {
+  background: #4A90E2;
+  color: #FFFFFF;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.filter-actions button {
+  flex: 1;
+}
+
+.create-menu {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 40rpx;
+  animation: slideUp 0.3s ease;
+}
+
+.create-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx;
+  background: #F8F8F8;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  transition: all 0.2s;
+}
+
+.create-item:active {
+  transform: scale(0.98);
+  background: #F0F0F0;
+}
+
+.create-icon {
+  font-size: 48rpx;
+  margin-right: 24rpx;
+}
+
+.create-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}

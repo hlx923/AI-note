@@ -1,0 +1,203 @@
+/* pages/note/detail/detail.wxss */
+.container {
+  min-height: 100vh;
+  background: #F5F5F5;
+  padding: 40rpx;
+}
+
+.note-header {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.note-tag {
+  padding: 8rpx 16rpx;
+  background: #E3F2FD;
+  color: #4A90E2;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+}
+
+.note-lock {
+  font-size: 32rpx;
+}
+
+.note-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.4;
+  margin-bottom: 16rpx;
+}
+
+.note-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.meta-item {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.note-content-section {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.note-content {
+  display: block;
+  font-size: 30rpx;
+  line-height: 1.8;
+  color: #333;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.note-textarea {
+  width: 100%;
+  min-height: 400rpx;
+  font-size: 30rpx;
+  line-height: 1.8;
+  color: #333;
+}
+
+.note-images {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.images-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+}
+
+.image-item {
+  width: 100%;
+  height: 200rpx;
+  border-radius: 12rpx;
+}
+
+.note-keywords {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.keywords-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.keywords-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.keyword-item {
+  padding: 8rpx 16rpx;
+  background: #F0F0F0;
+  color: #666;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+}
+
+.note-todos {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.todos-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.todos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16rpx;
+  background: #F8F8F8;
+  border-radius: 12rpx;
+}
+
+.todo-number {
+  font-size: 26rpx;
+  color: #4A90E2;
+  font-weight: 600;
+  margin-right: 12rpx;
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.action-buttons {
+  margin-top: 20rpx;
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.button-group button {
+  padding: 24rpx;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 200rpx 40rpx;
+}
+
+.empty-icon {
+  display: block;
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  display: block;
+  font-size: 28rpx;
+  color: #999;
+}

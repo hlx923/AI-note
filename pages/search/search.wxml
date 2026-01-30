@@ -1,0 +1,120 @@
+<!-- pages/search/search.wxml -->
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <view class="search-icon">🔍</view>
+      <input
+        class="search-input"
+        type="text"
+        value="{{keyword}}"
+        placeholder="搜索笔记内容、标签、关键词"
+        confirm-type="search"
+        bindinput="onInput"
+        bindconfirm="onSearch"
+      />
+      <view class="clear-icon" wx:if="{{keyword}}" bindtap="clearInput">×</view>
+    </view>
+
+    <view class="voice-btn {{isRecording ? 'recording' : ''}}"
+          bindtouchstart="startVoiceSearch"
+          bindtouchend="stopVoiceSearch">
+      <text class="voice-icon">🎤</text>
+    </view>
+  </view>
+
+  <!-- 搜索历史和热门 -->
+  <view class="search-suggestions" wx:if="{{showHistory}}">
+    <!-- 搜索历史 -->
+    <view class="suggestion-section" wx:if="{{searchHistory.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">搜索历史</text>
+        <text class="section-action" bindtap="clearSearchHistory">清空</text>
+      </view>
+      <view class="tag-list">
+        <view
+          class="tag-item"
+          wx:for="{{searchHistory}}"
+          wx:key="index"
+          bindtap="selectHistory"
+          data-keyword="{{item}}"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 热门搜索 -->
+    <view class="suggestion-section">
+      <view class="section-header">
+        <text class="section-title">热门搜索</text>
+      </view>
+      <view class="tag-list">
+        <view
+          class="tag-item hot"
+          wx:for="{{hotKeywords}}"
+          wx:key="index"
+          bindtap="selectHotKeyword"
+          data-keyword="{{item}}"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{!showHistory}}">
+    <view class="result-header" wx:if="{{searchResults.length > 0}}">
+      <text class="result-count">找到 {{searchResults.length}} 条笔记</text>
+    </view>
+
+    <view class="result-list" wx:if="{{searchResults.length > 0}}">
+      <view
+        class="result-item"
+        wx:for="{{searchResults}}"
+        wx:key="id"
+        bindtap="goToDetail"
+        data-id="{{item.id}}"
+      >
+        <view class="result-header-row">
+          <rich-text class="result-title" nodes="{{item.highlightedTitle}}" />
+          <view class="result-tag">{{item.tag}}</view>
+        </view>
+
+        <rich-text class="result-content" nodes="{{item.highlightedContent}}" />
+
+        <view class="result-footer">
+          <view class="result-keywords" wx:if="{{item.keywords && item.keywords.length > 0}}">
+            <text class="keyword-tag" wx:for="{{item.keywords}}" wx:key="index" wx:for-item="kw">
+              #{{kw}}
+            </text>
+          </view>
+          <text class="result-time">{{item.timeAgo}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 无结果 -->
+    <view class="empty-state" wx:if="{{searchResults.length === 0 && !isSearching}}">
+      <text class="empty-icon">🔍</text>
+      <text class="empty-text">未找到相关笔记</text>
+      <text class="empty-hint">试试其他关键词吧</text>
+    </view>
+
+    <!-- 加载中 -->
+    <view class="loading" wx:if="{{isSearching}}">
+      <text>搜索中...</text>
+    </view>
+  </view>
+
+  <!-- 语音搜索提示 -->
+  <view class="voice-modal" wx:if="{{isRecording}}">
+    <view class="voice-animation">
+      <view class="wave"></view>
+      <view class="wave"></view>
+      <view class="wave"></view>
+    </view>
+    <text class="voice-hint">说出你要搜索的内容</text>
+  </view>
+</view>

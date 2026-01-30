@@ -1,0 +1,128 @@
+<!-- pages/note/list/list.wxml -->
+<view class="container">
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <scroll-view class="tag-scroll" scroll-x>
+      <view class="tag-list">
+        <view
+          class="tag-item {{selectedTag === '' ? 'active' : ''}}"
+          bindtap="selectTag"
+          data-tag=""
+        >
+          全部
+        </view>
+        <view
+          class="tag-item {{selectedTag === item ? 'active' : ''}}"
+          wx:for="{{tags}}"
+          wx:key="index"
+          bindtap="selectTag"
+          data-tag="{{item}}"
+        >
+          {{item}}
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="filter-icon" bindtap="showFilterMenu">
+      <text>筛选</text>
+    </view>
+  </view>
+
+  <!-- 笔记列表 -->
+  <view class="note-list" wx:if="{{notes.length > 0}}">
+    <view
+      class="note-item"
+      wx:for="{{notes}}"
+      wx:key="id"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="note-header">
+        <text class="note-title">{{item.title}}</text>
+        <view class="note-lock" wx:if="{{item.isLocked}}">🔒</view>
+      </view>
+
+      <text class="note-content">{{item.content}}</text>
+
+      <view class="note-footer">
+        <view class="note-tag">{{item.tag}}</view>
+        <text class="note-time">{{item.timeAgo}}</text>
+      </view>
+
+      <!-- 关键词 -->
+      <view class="note-keywords" wx:if="{{item.keywords && item.keywords.length > 0}}">
+        <view class="keyword-tag" wx:for="{{item.keywords}}" wx:key="index" wx:for-item="keyword">
+          #{{keyword}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{notes.length === 0}}">
+    <text class="empty-icon">📝</text>
+    <text class="empty-text">{{selectedTag ? '该标签下暂无笔记' : '还没有笔记，快去创建吧'}}</text>
+  </view>
+
+  <!-- 快速创建按钮 -->
+  <view class="fab" bindtap="showCreateMenu">
+    <text class="fab-icon">+</text>
+  </view>
+</view>
+
+<!-- 筛选菜单 -->
+<view class="modal-mask" wx:if="{{showFilter}}" bindtap="hideFilterMenu">
+  <view class="filter-menu" catchtap="stopPropagation">
+    <view class="menu-title">筛选条件</view>
+
+    <view class="filter-section">
+      <text class="filter-label">时间范围</text>
+      <view class="filter-options">
+        <view
+          class="filter-option {{timeRange === '' ? 'active' : ''}}"
+          bindtap="selectTimeRange"
+          data-range=""
+        >
+          全部
+        </view>
+        <view
+          class="filter-option {{timeRange === '7days' ? 'active' : ''}}"
+          bindtap="selectTimeRange"
+          data-range="7days"
+        >
+          最近7天
+        </view>
+        <view
+          class="filter-option {{timeRange === '30days' ? 'active' : ''}}"
+          bindtap="selectTimeRange"
+          data-range="30days"
+        >
+          最近30天
+        </view>
+      </view>
+    </view>
+
+    <view class="filter-actions">
+      <button class="btn-ghost" bindtap="resetFilter">重置</button>
+      <button class="btn-primary" bindtap="applyFilter">确定</button>
+    </view>
+  </view>
+</view>
+
+<!-- 创建菜单 -->
+<view class="modal-mask" wx:if="{{showCreate}}" bindtap="hideCreateMenu">
+  <view class="create-menu" catchtap="stopPropagation">
+    <view class="create-item" bindtap="goToVoiceRecord">
+      <view class="create-icon">🎤</view>
+      <text class="create-text">语音速记</text>
+    </view>
+    <view class="create-item" bindtap="goToPhotoRecord">
+      <view class="create-icon">📷</view>
+      <text class="create-text">拍照记笔记</text>
+    </view>
+    <view class="create-item" bindtap="goToHandwrite">
+      <view class="create-icon">✍️</view>
+      <text class="create-text">手写涂鸦</text>
+    </view>
+  </view>
+</view>

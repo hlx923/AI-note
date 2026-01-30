@@ -1,0 +1,121 @@
+<!-- pages/settings/settings.wxml -->
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-section">
+    <view class="user-avatar">👤</view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickName || '未登录'}}</text>
+      <text class="user-stats">共 {{noteCount}} 条笔记</text>
+    </view>
+  </view>
+
+  <!-- 设置列表 -->
+  <view class="settings-section">
+    <text class="section-title">标签管理</text>
+    <view class="setting-item" bindtap="manageTags">
+      <view class="item-left">
+        <text class="item-icon">🏷️</text>
+        <text class="item-label">自定义标签</text>
+      </view>
+      <view class="item-right">
+        <text class="item-value">{{tags.length}} 个</text>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="settings-section">
+    <text class="section-title">数据管理</text>
+    <view class="setting-item" bindtap="exportAllNotes">
+      <view class="item-left">
+        <text class="item-icon">📤</text>
+        <text class="item-label">导出所有笔记</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+    <view class="setting-item" bindtap="clearCache">
+      <view class="item-left">
+        <text class="item-icon">🗑️</text>
+        <text class="item-label">清除缓存</text>
+      </view>
+      <view class="item-right">
+        <text class="item-value">{{cacheSize}}</text>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+    <view class="setting-item danger" bindtap="clearAllData">
+      <view class="item-left">
+        <text class="item-icon">⚠️</text>
+        <text class="item-label">清空所有数据</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="settings-section">
+    <text class="section-title">API配置</text>
+    <view class="setting-item" bindtap="configBaiduOCR">
+      <view class="item-left">
+        <text class="item-icon">🔑</text>
+        <text class="item-label">百度OCR密钥</text>
+      </view>
+      <view class="item-right">
+        <text class="item-value">{{baiduConfigured ? '已配置' : '未配置'}}</text>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="settings-section">
+    <text class="section-title">关于</text>
+    <view class="setting-item" bindtap="showAbout">
+      <view class="item-left">
+        <text class="item-icon">ℹ️</text>
+        <text class="item-label">关于应用</text>
+      </view>
+      <view class="item-right">
+        <text class="item-value">v1.0.0</text>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+    <view class="setting-item" bindtap="showHelp">
+      <view class="item-left">
+        <text class="item-icon">❓</text>
+        <text class="item-label">使用帮助</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 标签管理弹窗 -->
+  <view class="modal" wx:if="{{showTagModal}}" bindtap="closeTagModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">标签管理</text>
+        <text class="modal-close" bindtap="closeTagModal">×</text>
+      </view>
+      <view class="modal-body">
+        <view class="tag-input-wrapper">
+          <input
+            class="tag-input"
+            type="text"
+            value="{{newTag}}"
+            placeholder="输入新标签名称"
+            bindinput="onTagInput"
+          />
+          <button class="add-tag-btn" bindtap="addTag">添加</button>
+        </view>
+        <view class="tag-list">
+          <view
+            class="tag-item-row"
+            wx:for="{{tags}}"
+            wx:key="index"
+          >
+            <text class="tag-name">{{item}}</text>
+            <text class="delete-tag" bindtap="deleteTag" data-tag="{{item}}">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

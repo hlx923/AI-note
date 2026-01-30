@@ -1,0 +1,94 @@
+<!-- pages/record/photo/photo.wxml -->
+<view class="container">
+  <!-- 拍照区域 -->
+  <view class="photo-section" wx:if="{{photos.length === 0}}">
+    <view class="photo-placeholder">
+      <view class="placeholder-icon">📷</view>
+      <text class="placeholder-text">拍照或选择图片开始识别</text>
+      <text class="placeholder-hint">支持连续拍摄最多{{maxPhotos}}张</text>
+    </view>
+
+    <view class="photo-actions">
+      <button class="btn-primary" bindtap="takePhoto">
+        拍照
+      </button>
+      <button class="btn-secondary" bindtap="chooseFromAlbum">
+        从相册选择
+      </button>
+    </view>
+  </view>
+
+  <!-- 照片预览 -->
+  <view class="photos-preview" wx:if="{{photos.length > 0}}">
+    <view class="preview-header">
+      <text class="preview-title">已选择 {{photos.length}}/{{maxPhotos}} 张</text>
+      <text class="preview-reset" bindtap="resetPhotos">重新拍摄</text>
+    </view>
+
+    <view class="preview-grid">
+      <view class="preview-item" wx:for="{{photos}}" wx:key="index">
+        <image
+          class="preview-image"
+          src="{{item}}"
+          mode="aspectFill"
+          bindtap="previewImage"
+          data-index="{{index}}"
+        />
+        <view class="preview-delete" bindtap="deletePhoto" data-index="{{index}}">
+          ×
+        </view>
+      </view>
+
+      <!-- 添加更多 -->
+      <view class="preview-add" wx:if="{{photos.length < maxPhotos}}" bindtap="takePhoto">
+        <text class="add-icon">+</text>
+        <text class="add-text">继续拍摄</text>
+      </view>
+    </view>
+
+    <view class="preview-actions">
+      <button class="btn-primary" bindtap="startRecognize" disabled="{{isProcessing}}">
+        {{isProcessing ? '识别中...' : '开始识别'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 识别结果 -->
+  <view class="result-section" wx:if="{{recognizedText}}">
+    <view class="result-header">
+      <text class="result-title">识别结果</text>
+      <text class="result-length">{{recognizedText.length}}字</text>
+    </view>
+
+    <view class="result-content">
+      <textarea
+        class="result-textarea"
+        value="{{recognizedText}}"
+        placeholder="识别结果将显示在这里"
+        maxlength="-1"
+        auto-height
+      />
+    </view>
+
+    <view class="result-actions">
+      <button class="btn-primary" bindtap="organizeNote">
+        AI规整并保存
+      </button>
+      <button class="btn-secondary" bindtap="manualSave">
+        直接保存
+      </button>
+    </view>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="tips-section" wx:if="{{photos.length === 0 && !recognizedText}}">
+    <view class="tips-title">💡 使用提示</view>
+    <view class="tips-list">
+      <view class="tip-item">• 支持连续拍摄最多3张照片</view>
+      <view class="tip-item">• 自动拼接提取所有文字</view>
+      <view class="tip-item">• 支持识别课件、白板、书籍等</view>
+      <view class="tip-item">• 识别后可手动编辑修正</view>
+      <view class="tip-item">• AI自动规整并分类笔记</view>
+    </view>
+  </view>
+</view>

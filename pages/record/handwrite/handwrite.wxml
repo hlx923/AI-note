@@ -1,0 +1,102 @@
+<!-- pages/record/handwrite/handwrite.wxml -->
+<view class="container">
+  <!-- 画布区域 -->
+  <view class="canvas-section">
+    <canvas
+      canvas-id="handwriteCanvas"
+      id="handwriteCanvas"
+      class="handwrite-canvas"
+      disable-scroll="true"
+      bindtouchstart="touchStart"
+      bindtouchmove="touchMove"
+      bindtouchend="touchEnd"
+    />
+
+    <view class="canvas-placeholder" wx:if="{{!hasDrawing}}">
+      <text class="placeholder-text">✍️ 在此区域手写内容</text>
+    </view>
+  </view>
+
+  <!-- 工具栏 -->
+  <view class="toolbar">
+    <!-- 颜色选择 -->
+    <view class="tool-group">
+      <text class="tool-label">颜色</text>
+      <view class="color-picker">
+        <view
+          class="color-item {{lineColor === item ? 'active' : ''}}"
+          wx:for="{{colors}}"
+          wx:key="index"
+          style="background-color: {{item}}"
+          bindtap="selectColor"
+          data-color="{{item}}"
+        />
+      </view>
+    </view>
+
+    <!-- 粗细选择 -->
+    <view class="tool-group">
+      <text class="tool-label">粗细</text>
+      <view class="width-picker">
+        <view
+          class="width-item {{lineWidth === item ? 'active' : ''}}"
+          wx:for="{{lineWidths}}"
+          wx:key="index"
+          bindtap="selectLineWidth"
+          data-width="{{item}}"
+        >
+          <view class="width-dot" style="width: {{item * 2}}rpx; height: {{item * 2}}rpx" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="tool-actions">
+      <button class="btn-ghost btn-small" bindtap="clearCanvas">
+        清空
+      </button>
+      <button class="btn-primary btn-small" bindtap="startRecognize" disabled="{{!hasDrawing}}">
+        识别
+      </button>
+    </view>
+  </view>
+
+  <!-- 识别结果 -->
+  <view class="result-section" wx:if="{{recognizedText}}">
+    <view class="result-header">
+      <text class="result-title">识别结果</text>
+      <text class="result-hint">可手动修改</text>
+    </view>
+
+    <view class="result-content">
+      <textarea
+        class="result-textarea"
+        value="{{recognizedText}}"
+        placeholder="识别结果将显示在这里"
+        maxlength="-1"
+        auto-height
+        bindinput="onTextInput"
+      />
+    </view>
+
+    <view class="result-actions">
+      <button class="btn-primary" bindtap="organizeNote">
+        AI规整并保存
+      </button>
+      <button class="btn-secondary" bindtap="manualSave">
+        直接保存
+      </button>
+    </view>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="tips-section" wx:if="{{!hasDrawing && !recognizedText}}">
+    <view class="tips-title">💡 使用提示</view>
+    <view class="tips-list">
+      <view class="tip-item">• 支持切换笔迹颜色和粗细</view>
+      <view class="tip-item">• 写错可清空重新书写</view>
+      <view class="tip-item">• 识别后可手动修改文字</view>
+      <view class="tip-item">• AI自动规整并分类笔记</view>
+    </view>
+  </view>
+</view>

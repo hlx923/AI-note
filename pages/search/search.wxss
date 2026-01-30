@@ -1,0 +1,293 @@
+/* pages/search/search.wxss */
+.container {
+  min-height: 100vh;
+  background: #F5F5F5;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx 30rpx;
+  background: #FFFFFF;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.search-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #F5F5F5;
+  border-radius: 24rpx;
+  padding: 16rpx 24rpx;
+}
+
+.search-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.clear-icon {
+  font-size: 40rpx;
+  color: #999;
+  line-height: 1;
+  padding: 0 8rpx;
+}
+
+.voice-btn {
+  width: 80rpx;
+  height: 80rpx;
+  background: #4A90E2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.voice-btn.recording {
+  background: #FF4444;
+  animation: pulse 1s infinite;
+}
+
+.voice-icon {
+  font-size: 40rpx;
+  color: #FFFFFF;
+}
+
+.search-suggestions {
+  padding: 40rpx 30rpx;
+}
+
+.suggestion-section {
+  margin-bottom: 40rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.section-action {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag-item {
+  padding: 12rpx 24rpx;
+  background: #F5F5F5;
+  color: #666;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+}
+
+.tag-item.hot {
+  background: #FFF3E0;
+  color: #FF6600;
+}
+
+.search-results {
+  padding: 20rpx 30rpx;
+}
+
+.result-header {
+  margin-bottom: 20rpx;
+}
+
+.result-count {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.result-item {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.result-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.result-title {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-tag {
+  padding: 6rpx 16rpx;
+  background: #E3F2FD;
+  color: #4A90E2;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  margin-left: 12rpx;
+}
+
+.result-content {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 12rpx;
+}
+
+.result-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-keywords {
+  display: flex;
+  gap: 8rpx;
+  flex-wrap: wrap;
+}
+
+.keyword-tag {
+  padding: 4rpx 12rpx;
+  background: #F0F0F0;
+  color: #666;
+  border-radius: 6rpx;
+  font-size: 22rpx;
+}
+
+.result-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 高亮样式 */
+.highlight {
+  color: #4A90E2;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 200rpx 40rpx;
+}
+
+.empty-icon {
+  display: block;
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  display: block;
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 12rpx;
+}
+
+.empty-hint {
+  display: block;
+  font-size: 24rpx;
+  color: #CCCCCC;
+}
+
+.loading {
+  text-align: center;
+  padding: 80rpx 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.voice-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.voice-animation {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 40rpx;
+}
+
+.wave {
+  width: 8rpx;
+  height: 80rpx;
+  background: #FFFFFF;
+  border-radius: 4rpx;
+  animation: wave 1s infinite ease-in-out;
+}
+
+.wave:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.wave:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.voice-hint {
+  font-size: 32rpx;
+  color: #FFFFFF;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
