@@ -1,5 +1,10 @@
 // utils/util.js - 工具函数
 const formatTime = date => {
+  // 如果传入的是时间戳（数字），转换为Date对象
+  if (typeof date === 'number') {
+    date = new Date(date)
+  }
+
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
