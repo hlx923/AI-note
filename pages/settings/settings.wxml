@@ -53,20 +53,6 @@
   </view>
 
   <view class="settings-section">
-    <text class="section-title">API配置</text>
-    <view class="setting-item" bindtap="configBaiduOCR">
-      <view class="item-left">
-        <text class="item-icon">🔑</text>
-        <text class="item-label">百度OCR密钥</text>
-      </view>
-      <view class="item-right">
-        <text class="item-value">{{baiduConfigured ? '已配置' : '未配置'}}</text>
-        <text class="item-arrow">›</text>
-      </view>
-    </view>
-  </view>
-
-  <view class="settings-section">
     <text class="section-title">关于</text>
     <view class="setting-item" bindtap="showAbout">
       <view class="item-left">
