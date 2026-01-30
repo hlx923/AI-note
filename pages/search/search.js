@@ -184,8 +184,9 @@ Page({
 
   // 停止语音搜索
   stopVoiceSearch() {
-    recorderManager.stop()
-    this.setData({ isRecording: false })
+    if (this.data.isRecording) {
+      recorderManager.stop()
+    }
   },
 
   // 语音转文字
@@ -193,17 +194,21 @@ Page({
     wx.showLoading({ title: '识别中...' })
 
     try {
-      // 使用微信同声传译插件或其他语音识别服务
-      // 这里使用模拟数据
+      // 由于云开发环境暂时不可用，暂时禁用语音识别功能
+      // 用户可以直接使用文字搜索
       setTimeout(() => {
         wx.hideLoading()
-        const keyword = '会议待办'
-        this.setData({ keyword })
-        this.performSearch(keyword)
-      }, 1000)
+        this.setData({ isRecording: false })
+        wx.showToast({
+          title: '语音识别暂不可用，请使用文字搜索',
+          icon: 'none',
+          duration: 2000
+        })
+      }, 500)
     } catch (error) {
       console.error('语音识别失败', error)
       wx.hideLoading()
+      this.setData({ isRecording: false })
       wx.showToast({
         title: '识别失败',
         icon: 'none'
