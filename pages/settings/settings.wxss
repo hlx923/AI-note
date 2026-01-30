@@ -279,13 +279,14 @@
 
 .nickname-input {
   width: 100%;
-  padding: 20rpx 24rpx;
+  height: 80rpx;
+  padding: 0 24rpx;
   background: #F8F9FA;
   border: 1rpx solid #E5E7EB;
   border-radius: 16rpx;
   font-size: 28rpx;
   box-sizing: border-box;
-  line-height: 1.5;
+  line-height: 80rpx;
 }
 
 .confirm-login-btn {
