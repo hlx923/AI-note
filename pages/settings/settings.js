@@ -33,15 +33,22 @@ Page({
 
   // 处理登录
   handleLogin() {
+    console.log('点击了登录区域')
+    console.log('当前用户信息:', this.data.userInfo)
+
     // 如果已登录，不做处理
     if (this.data.userInfo.nickName) {
+      console.log('用户已登录，无需重复登录')
       return
     }
+
+    console.log('开始调用 getUserProfile')
 
     // 使用新版API获取用户信息
     wx.getUserProfile({
       desc: '用于完善用户资料',
       success: (res) => {
+        console.log('获取用户信息成功:', res)
         const userInfo = res.userInfo
         this.setData({ userInfo })
         wx.setStorageSync('userInfo', userInfo)
