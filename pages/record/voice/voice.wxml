@@ -46,9 +46,9 @@
   </view>
 
   <!-- 识别结果 -->
-  <view class="result-section" wx:if="{{recognizedText}}">
+  <view class="result-section" wx:if="{{!isRecording && tempFilePath}}">
     <view class="result-header">
-      <text class="result-title">转写结果</text>
+      <text class="result-title">录音内容</text>
       <text class="result-length">{{recognizedText.length}}字</text>
     </view>
 
@@ -56,10 +56,10 @@
       <textarea
         class="result-textarea"
         value="{{recognizedText}}"
-        placeholder="转写结果将显示在这里"
+        placeholder="请输入录音内容..."
         maxlength="-1"
         auto-height
-        disabled
+        bindinput="onTextInput"
       />
     </view>
 

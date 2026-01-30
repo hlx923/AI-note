@@ -78,26 +78,26 @@ class APIManager {
     })
   }
 
-  // 微信原生语音识别（使用模拟数据）
+  // 微信原生语音识别（返回空文本，让用户手动输入）
   static async voiceToText(tempFilePath) {
     try {
       // 微信小程序的语音识别需要使用插件或云函数
-      // 这里使用模拟数据，用户可以手动编辑转写结果
+      // 这里返回空文本，让用户手动输入录音内容
       console.log('语音文件路径:', tempFilePath)
 
       // 模拟延迟
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise(resolve => setTimeout(resolve, 500))
 
-      // 返回模拟数据
+      // 返回空文本，提示用户手动输入
       return {
         success: true,
-        text: '这是语音转写的模拟文本。您可以说：今天开会讨论了项目进度，需要在本周五前完成功能开发和测试。请注意代码质量和文档完善。'
+        text: ''
       }
     } catch (error) {
       console.error('语音转文字错误:', error)
       return {
         success: true,
-        text: '语音识别暂时使用模拟数据。您可以手动编辑这段文字，或者配置真实的语音识别服务。'
+        text: ''
       }
     }
   }

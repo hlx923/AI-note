@@ -173,10 +173,10 @@ Page({
 
   // 语音转文字
   async convertVoiceToText(filePath) {
-    showLoading('正在转写...')
+    showLoading('录音完成')
 
     try {
-      // 调用语音识别API（这里使用模拟数据，实际应用中需要接入真实的语音识别服务）
+      // 调用语音识别API（返回空文本，让用户手动输入）
       const result = await APIManager.voiceToText(filePath)
 
       hideLoading()
@@ -185,27 +185,26 @@ Page({
         this.setData({
           recognizedText: result.text
         })
-        this.showOrganizePrompt()
+        // 不自动弹出提示，让用户先输入内容
+        showToast('请输入录音内容', 'none')
       } else {
-        showToast('转写失败，请重试')
+        showToast('录音失败，请重试')
       }
     } catch (error) {
       console.error('语音转文字错误', error)
       hideLoading()
-      // 使用模拟数据
       this.setData({
-        recognizedText: '这是一段模拟的语音转写文本。在实际应用中，这里会显示真实的语音识别结果。您可以在这里记录会议内容、课堂笔记或者日常想法。'
+        recognizedText: ''
       })
-      this.showOrganizePrompt()
+      showToast('请输入录音内容', 'none')
     }
   },
 
-  // 显示规整提示
-  async showOrganizePrompt() {
-    const confirm = await showConfirm('转写完成，是否进行AI规整？', '提示')
-    if (confirm) {
-      this.organizeNote()
-    }
+  // 文本输入事件
+  onTextInput(e) {
+    this.setData({
+      recognizedText: e.detail.value
+    })
   },
 
   // AI规整笔记
