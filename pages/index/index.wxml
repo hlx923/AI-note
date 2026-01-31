@@ -2,7 +2,6 @@
 <view class="container" style="height: 1231rpx; display: block; box-sizing: border-box">
   <!-- 顶部欢迎区 -->
   <view class="welcome-section">
-    <text class="welcome-title">AI笔记助手</text>
     <text class="welcome-subtitle">轻量录入 · 智能规整 · 即时检索</text>
   </view>
 
