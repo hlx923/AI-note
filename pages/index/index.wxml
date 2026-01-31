@@ -27,6 +27,27 @@
     </view>
   </view>
 
+  <!-- 高级功能入口 -->
+  <view class="advanced-actions">
+    <view class="advanced-card" bindtap="goToSummary">
+      <view class="advanced-icon">📄</view>
+      <view class="advanced-info">
+        <text class="advanced-title">长文总结</text>
+        <text class="advanced-desc">AI智能提取核心观点</text>
+      </view>
+      <text class="advanced-arrow">›</text>
+    </view>
+
+    <view class="advanced-card" bindtap="goToDocument">
+      <view class="advanced-icon">📁</view>
+      <view class="advanced-info">
+        <text class="advanced-title">文档增强</text>
+        <text class="advanced-desc">上传文档智能提取要点</text>
+      </view>
+      <text class="advanced-arrow">›</text>
+    </view>
+  </view>
+
   <!-- 最近查看/编辑 -->
   <view class="recent-section" wx:if="{{recentNotes.length > 0}}">
     <view class="section-header">
@@ -66,5 +87,41 @@
   <view class="empty-state" wx:if="{{recentNotes.length === 0}}">
     <text class="empty-icon">📝</text>
     <text class="empty-text">还没有笔记，快来创建第一条吧！</text>
+  </view>
+
+  <!-- 灵感闪记浮动按钮 -->
+  <view class="quick-record-fab" bindtap="showQuickRecordModal">
+    <text class="fab-icon">💡</text>
+  </view>
+
+  <!-- 快速录音弹窗 -->
+  <view class="quick-record-modal" wx:if="{{showQuickRecord}}" bindtap="hideQuickRecordModal">
+    <view class="quick-record-content" catchtap="">
+      <view class="quick-record-header">
+        <text class="quick-record-title">灵感闪记</text>
+        <text class="quick-record-close" bindtap="hideQuickRecordModal">×</text>
+      </view>
+
+      <view class="quick-record-body">
+        <view class="quick-record-circle {{isQuickRecording ? 'recording' : ''}}">
+          <text class="quick-record-icon">🎤</text>
+        </view>
+
+        <text class="quick-record-time">{{formatQuickTime(quickRecordTime)}}</text>
+
+        <text class="quick-record-hint" wx:if="{{!isQuickRecording}}">
+          点击下方按钮开始录音
+        </text>
+        <text class="quick-record-hint" wx:if="{{isQuickRecording}}">
+          正在录音中...
+        </text>
+      </view>
+
+      <view class="quick-record-footer">
+        <button class="btn-quick-record" bindtap="{{isQuickRecording ? 'stopQuickRecord' : 'startQuickRecord'}}">
+          {{isQuickRecording ? '完成录音' : '开始录音'}}
+        </button>
+      </view>
+    </view>
   </view>
 </view>

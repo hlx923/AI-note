@@ -1,0 +1,141 @@
+<!-- pages/record/document/document.wxml -->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">📄 文档增强</text>
+    <text class="page-desc">上传文档，AI智能提取核心内容</text>
+  </view>
+
+  <!-- 文件选择区域 -->
+  <view class="file-select-section" wx:if="{{!selectedFile}}">
+    <view class="select-options">
+      <view class="select-card" bindtap="chooseFile">
+        <view class="select-icon">📁</view>
+        <text class="select-title">选择文档</text>
+        <text class="select-desc">支持PDF、Word、TXT</text>
+      </view>
+
+      <view class="select-card" bindtap="chooseImage">
+        <view class="select-icon">🖼️</view>
+        <text class="select-title">拍照识别</text>
+        <text class="select-desc">拍摄文档照片识别</text>
+      </view>
+    </view>
+
+    <!-- 支持格式说明 -->
+    <view class="support-info">
+      <text class="support-title">支持的文件格式：</text>
+      <view class="support-list">
+        <view class="support-item" wx:for="{{supportedTypes}}" wx:key="type">
+          <text class="support-icon">{{item.icon}}</text>
+          <text class="support-name">{{item.name}}</text>
+        </view>
+      </view>
+      <text class="support-note">* 文件大小限制：10MB以内</text>
+    </view>
+  </view>
+
+  <!-- 文件信息显示 -->
+  <view class="file-info-section" wx:if="{{selectedFile && !enhancedResult}}">
+    <view class="file-card">
+      <view class="file-icon">
+        {{fileType === 'pdf' ? '📄' : fileType === 'doc' ? '📝' : fileType === 'image' ? '🖼️' : '📃'}}
+      </view>
+      <view class="file-details">
+        <text class="file-name">{{fileName}}</text>
+        <text class="file-size">{{formatFileSize(fileSize)}}</text>
+      </view>
+      <view class="file-actions">
+        <text class="file-remove" bindtap="resetFile">×</text>
+      </view>
+    </view>
+
+    <button class="btn-process" bindtap="processDocument" disabled="{{isProcessing}}">
+      {{isProcessing ? '处理中...' : '开始处理'}}
+    </button>
+  </view>
+
+  <!-- 处理结果显示 -->
+  <view class="result-section" wx:if="{{enhancedResult}}">
+    <view class="result-card">
+      <view class="result-header">
+        <text class="result-title">📋 处理结果</text>
+        <text class="result-reset" bindtap="resetFile">重新选择</text>
+      </view>
+
+      <!-- 文档标题 -->
+      <view class="result-item" wx:if="{{enhancedResult.title}}">
+        <text class="item-label">📌 标题</text>
+        <text class="item-content">{{enhancedResult.title}}</text>
+      </view>
+
+      <!-- 内容摘要 -->
+      <view class="result-item" wx:if="{{enhancedResult.summary}}">
+        <text class="item-label">📝 摘要</text>
+        <text class="item-content">{{enhancedResult.summary}}</text>
+      </view>
+
+      <!-- 核心要点 -->
+      <view class="result-item" wx:if="{{enhancedResult.keyPoints && enhancedResult.keyPoints.length > 0}}">
+        <text class="item-label">💡 核心要点</text>
+        <view class="key-points">
+          <view class="key-point" wx:for="{{enhancedResult.keyPoints}}" wx:key="index">
+            <text class="point-number">{{index + 1}}</text>
+            <text class="point-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 思考问题 -->
+      <view class="result-item" wx:if="{{enhancedResult.questions && enhancedResult.questions.length > 0}}">
+        <text class="item-label">❓ 思考问题</text>
+        <view class="questions">
+          <view class="question-item" wx:for="{{enhancedResult.questions}}" wx:key="index">
+            <text class="question-text">{{index + 1}}. {{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 分类标签 -->
+      <view class="result-item" wx:if="{{enhancedResult.category}}">
+        <text class="item-label">🏷️ 分类</text>
+        <view class="category-tag">{{enhancedResult.category}}</view>
+      </view>
+
+      <!-- 关键词 -->
+      <view class="result-item" wx:if="{{enhancedResult.keywords && enhancedResult.keywords.length > 0}}">
+        <text class="item-label">🔖 关键词</text>
+        <view class="keywords">
+          <text class="keyword-tag" wx:for="{{enhancedResult.keywords}}" wx:key="index">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 原文内容（可折叠） -->
+    <view class="original-text" wx:if="{{extractedText}}">
+      <view class="original-header">
+        <text class="original-title">📖 提取的原文</text>
+      </view>
+      <view class="original-content">
+        <text class="original-text-content">{{extractedText}}</text>
+      </view>
+    </view>
+
+    <!-- 保存按钮 -->
+    <view class="save-actions">
+      <button class="btn-save" bindtap="saveEnhancedNote">保存为笔记</button>
+    </view>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="tips-section" wx:if="{{!selectedFile}}">
+    <view class="tips-title">💡 使用提示</view>
+    <view class="tips-list">
+      <view class="tip-item">• 支持PDF、Word、TXT等常见文档格式</view>
+      <view class="tip-item">• 可以拍照识别纸质文档内容</view>
+      <view class="tip-item">• AI自动提取核心要点和关键信息</view>
+      <view class="tip-item">• 生成思考问题，帮助深度理解</view>
+      <view class="tip-item">• 自动分类和标签，便于后续检索</view>
+    </view>
+  </view>
+</view>

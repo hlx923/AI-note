@@ -9,7 +9,8 @@ Page({
     isLocked: false,
     password: '',
     isEditing: false,
-    editContent: ''
+    editContent: '',
+    relatedNotes: []
   },
 
   onLoad(options) {
@@ -52,7 +53,31 @@ Page({
     // 添加到最近查看
     StorageManager.addToRecentViews(this.data.noteId)
 
+    // 加载关联笔记
+    this.loadRelatedNotes()
+
     this.setData({ note })
+  },
+
+  // 加载关联笔记
+  loadRelatedNotes() {
+    const relatedNotes = StorageManager.getRelatedNotes(this.data.noteId, 5)
+
+    // 格式化关联笔记
+    const formattedNotes = relatedNotes.map(note => ({
+      ...note,
+      shortContent: note.content ? note.content.substring(0, 50) + (note.content.length > 50 ? '...' : '') : ''
+    }))
+
+    this.setData({ relatedNotes: formattedNotes })
+  },
+
+  // 跳转到关联笔记
+  goToRelatedNote(e) {
+    const id = e.currentTarget.dataset.id
+    wx.redirectTo({
+      url: `/pages/note/detail/detail?id=${id}`
+    })
   },
 
   // 显示密码输入框

@@ -4,6 +4,8 @@
     "pages/record/voice/voice",
     "pages/record/photo/photo",
     "pages/record/handwrite/handwrite",
+    "pages/record/summary/summary",
+    "pages/record/document/document",
     "pages/note/detail/detail",
     "pages/note/list/list",
     "pages/search/search",

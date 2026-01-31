@@ -18,6 +18,25 @@
     </view>
   </view>
 
+  <!-- 方言选择器 -->
+  <view class="dialect-selector">
+    <view class="dialect-current" bindtap="toggleDialectSelector">
+      <text class="dialect-label">🗣️ {{getDialectName()}}</text>
+      <text class="dialect-icon">{{showDialectSelector ? '▲' : '▼'}}</text>
+    </view>
+    <view class="dialect-options" wx:if="{{showDialectSelector}}">
+      <view class="dialect-option {{dialect === item.code ? 'active' : ''}}"
+            wx:for="{{dialectList}}"
+            wx:key="code"
+            bindtap="selectDialect"
+            data-dialect="{{item.code}}">
+        <text class="option-name">{{item.name}}</text>
+        <text class="option-desc">{{item.desc}}</text>
+        <text class="option-check" wx:if="{{dialect === item.code}}">✓</text>
+      </view>
+    </view>
+  </view>
+
   <!-- 录音状态显示 -->
   <view class="record-status">
     <view class="record-circle {{isRecording ? 'recording' : ''}}">

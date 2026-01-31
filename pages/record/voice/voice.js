@@ -18,14 +18,26 @@ Page({
     speakers: [], // 说话人列表
     showSpeakerModal: false,
     currentSpeaker: '',
-    newSpeakerName: ''
+    newSpeakerName: '',
+    dialect: 'mandarin', // 方言选择: mandarin(普通话), cantonese(粤语), sichuan(四川话), etc.
+    showDialectSelector: false,
+    dialectList: [
+      { code: 'mandarin', name: '普通话', desc: '标准普通话识别' },
+      { code: 'cantonese', name: '粤语', desc: '广东话识别' },
+      { code: 'sichuan', name: '四川话', desc: '四川方言识别' },
+      { code: 'henan', name: '河南话', desc: '河南方言识别' },
+      { code: 'dongbei', name: '东北话', desc: '东北方言识别' },
+      { code: 'shanghainese', name: '上海话', desc: '上海方言识别' }
+    ]
   },
 
   onLoad() {
     this.initRecorder()
     // 检查是否从会议纪要入口进入
     const mode = wx.getStorageSync('voiceMode') || 'normal'
-    this.setData({ mode })
+    // 加载用户偏好的方言设置
+    const dialect = wx.getStorageSync('preferredDialect') || 'mandarin'
+    this.setData({ mode, dialect })
     wx.removeStorageSync('voiceMode')
   },
 
@@ -197,11 +209,12 @@ Page({
         filePath: filePath
       })
 
-      // 调用云函数进行语音识别
+      // 调用云函数进行语音识别，传入方言参数
       const result = await wx.cloud.callFunction({
         name: 'voiceRecognition',
         data: {
-          fileID: uploadResult.fileID
+          fileID: uploadResult.fileID,
+          dialect: this.data.dialect // 传入方言参数
         }
       })
 
@@ -442,5 +455,30 @@ Page({
     } else {
       showToast('保存失败')
     }
+  },
+
+  // 切换方言选择器
+  toggleDialectSelector() {
+    this.setData({
+      showDialectSelector: !this.data.showDialectSelector
+    })
+  },
+
+  // 选择方言
+  selectDialect(e) {
+    const dialect = e.currentTarget.dataset.dialect
+    this.setData({
+      dialect,
+      showDialectSelector: false
+    })
+    // 保存用户偏好
+    wx.setStorageSync('preferredDialect', dialect)
+    showToast('已切换方言', 'success')
+  },
+
+  // 获取方言名称
+  getDialectName() {
+    const dialectItem = this.data.dialectList.find(d => d.code === this.data.dialect)
+    return dialectItem ? dialectItem.name : '普通话'
   }
 })

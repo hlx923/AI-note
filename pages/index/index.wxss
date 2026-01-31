@@ -64,6 +64,57 @@
   color: #999;
 }
 
+/* 高级功能入口 */
+.advanced-actions {
+  padding: 0 30rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.advanced-card {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+}
+
+.advanced-card:active {
+  transform: scale(0.98);
+}
+
+.advanced-icon {
+  font-size: 56rpx;
+  margin-right: 24rpx;
+}
+
+.advanced-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.advanced-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.advanced-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.advanced-arrow {
+  font-size: 48rpx;
+  color: #CCC;
+  font-weight: 300;
+}
+
 .recent-section {
   padding: 0 30rpx 40rpx;
 }
@@ -187,4 +238,139 @@
   display: block;
   font-size: 24rpx;
   color: #999;
+}
+
+/* 灵感闪记浮动按钮 */
+.quick-record-fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: 120rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.4);
+  z-index: 100;
+  transition: transform 0.3s;
+}
+
+.quick-record-fab:active {
+  transform: scale(0.9);
+}
+
+.fab-icon {
+  font-size: 56rpx;
+}
+
+/* 快速录音弹窗 */
+.quick-record-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.quick-record-content {
+  width: 600rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.quick-record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.quick-record-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.quick-record-close {
+  font-size: 48rpx;
+  color: #999;
+  line-height: 1;
+  padding: 0 8rpx;
+}
+
+.quick-record-body {
+  padding: 60rpx 32rpx;
+  text-align: center;
+}
+
+.quick-record-circle {
+  width: 200rpx;
+  height: 200rpx;
+  margin: 0 auto 32rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
+  transition: all 0.3s;
+}
+
+.quick-record-circle.recording {
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.6);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.quick-record-icon {
+  font-size: 80rpx;
+}
+
+.quick-record-time {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 16rpx;
+  font-family: 'Courier New', monospace;
+}
+
+.quick-record-hint {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.quick-record-footer {
+  padding: 32rpx;
+  border-top: 1rpx solid #F0F0F0;
+}
+
+.btn-quick-record {
+  width: 100%;
+  height: 88rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  line-height: 88rpx;
 }

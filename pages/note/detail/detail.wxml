@@ -70,6 +70,27 @@
     </view>
   </view>
 
+  <!-- 关联笔记推荐 -->
+  <view class="related-notes" wx:if="{{relatedNotes && relatedNotes.length > 0}}">
+    <view class="related-header">
+      <text class="related-title">🔗 相关笔记</text>
+      <text class="related-desc">基于内容智能推荐</text>
+    </view>
+    <view class="related-list">
+      <view class="related-item"
+            wx:for="{{relatedNotes}}"
+            wx:key="id"
+            bindtap="goToRelatedNote"
+            data-id="{{item.id}}">
+        <view class="related-item-header">
+          <text class="related-item-title">{{item.title}}</text>
+          <view class="related-item-tag">{{item.tag}}</view>
+        </view>
+        <text class="related-item-content">{{item.shortContent}}</text>
+      </view>
+    </view>
+  </view>
+
   <!-- 操作按钮 -->
   <view class="action-buttons">
     <view wx:if="{{!isEditing}}" class="button-group">

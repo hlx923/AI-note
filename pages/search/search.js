@@ -194,23 +194,49 @@ Page({
     wx.showLoading({ title: '识别中...' })
 
     try {
-      // 由于云开发环境暂时不可用，暂时禁用语音识别功能
-      // 用户可以直接使用文字搜索
-      setTimeout(() => {
-        wx.hideLoading()
-        this.setData({ isRecording: false })
+      // 上传音频文件到云存储
+      const uploadResult = await wx.cloud.uploadFile({
+        cloudPath: `voice/${Date.now()}.mp3`,
+        filePath: filePath
+      })
+
+      // 调用云函数进行语音识别
+      const result = await wx.cloud.callFunction({
+        name: 'voiceRecognition',
+        data: {
+          fileID: uploadResult.fileID,
+          dialect: 'mandarin'
+        }
+      })
+
+      wx.hideLoading()
+      this.setData({ isRecording: false })
+
+      if (result.result.success) {
+        const recognizedText = result.result.text
+        this.setData({ keyword: recognizedText })
+
+        // 自动执行搜索
+        if (recognizedText.trim()) {
+          this.performSearch(recognizedText.trim())
+        }
+
         wx.showToast({
-          title: '语音识别暂不可用，请使用文字搜索',
-          icon: 'none',
-          duration: 2000
+          title: '识别成功',
+          icon: 'success'
         })
-      }, 500)
+      } else {
+        wx.showToast({
+          title: '识别失败，请重试',
+          icon: 'none'
+        })
+      }
     } catch (error) {
       console.error('语音识别失败', error)
       wx.hideLoading()
       this.setData({ isRecording: false })
       wx.showToast({
-        title: '识别失败',
+        title: '识别失败，请重试',
         icon: 'none'
       })
     }

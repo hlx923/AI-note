@@ -4,7 +4,7 @@ App({
     // 初始化云开发环境
     if (wx.cloud) {
       wx.cloud.init({
-        env: 'ai-note-assistant-cloud-6c38d18a',
+        env: 'cloud1-5g4dtvhvbb57a72b',
         traceUser: true
       })
     }

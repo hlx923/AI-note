@@ -1,0 +1,116 @@
+<!-- pages/record/summary/summary.wxml -->
+<view class="container">
+  <!-- 顶部标题 -->
+  <view class="header">
+    <text class="header-title">长文总结</text>
+    <text class="header-subtitle">AI智能提取核心观点</text>
+  </view>
+
+  <!-- 模式选择器 -->
+  <view class="mode-selector">
+    <view class="mode-current" bindtap="toggleModeSelector">
+      <text class="mode-label">{{getModeName()}}</text>
+      <text class="mode-icon">{{showModeSelector ? '▲' : '▼'}}</text>
+    </view>
+    <view class="mode-options" wx:if="{{showModeSelector}}">
+      <view class="mode-option" bindtap="selectMode" data-mode="brief">
+        <text class="option-name">简要总结</text>
+        <text class="option-desc">提取核心内容，生成简短摘要</text>
+      </view>
+      <view class="mode-option" bindtap="selectMode" data-mode="detailed">
+        <text class="option-name">详细总结</text>
+        <text class="option-desc">保留更多细节，全面概括</text>
+      </view>
+      <view class="mode-option" bindtap="selectMode" data-mode="keypoints">
+        <text class="option-name">要点提取</text>
+        <text class="option-desc">列出关键要点，条理清晰</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 文本输入区 -->
+  <view class="input-section" wx:if="{{!summaryResult}}">
+    <view class="input-header">
+      <text class="input-title">输入文本</text>
+      <text class="input-counter">{{textLength}}/{{maxLength}}</text>
+    </view>
+    <textarea
+      class="input-textarea"
+      placeholder="粘贴或输入需要总结的长文本内容..."
+      value="{{inputText}}"
+      bindinput="onTextInput"
+      maxlength="{{maxLength}}"
+      auto-height
+    />
+    <view class="input-actions">
+      <button class="btn-clear" bindtap="clearText" disabled="{{!inputText}}">
+        清空
+      </button>
+      <button class="btn-summary" bindtap="startSummary" disabled="{{isProcessing || textLength < 50}}">
+        {{isProcessing ? '处理中...' : '开始总结'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 总结结果区 -->
+  <view class="result-section" wx:if="{{summaryResult}}">
+    <view class="result-header">
+      <text class="result-title">总结结果</text>
+      <view class="result-stats">
+        <text class="stat-item">原文: {{summaryResult.wordCount}}字</text>
+        <text class="stat-item">摘要: {{summaryResult.summaryWordCount}}字</text>
+      </view>
+    </view>
+
+    <!-- 总结内容 -->
+    <view class="summary-content">
+      <view class="summary-label">📝 摘要</view>
+      <text class="summary-text">{{summaryResult.summary}}</text>
+    </view>
+
+    <!-- 关键要点 -->
+    <view class="keypoints-content" wx:if="{{summaryResult.keyPoints.length > 0}}">
+      <view class="keypoints-label">💡 关键要点</view>
+      <view class="keypoints-list">
+        <view class="keypoint-item" wx:for="{{summaryResult.keyPoints}}" wx:key="index">
+          <text class="keypoint-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 标签 -->
+    <view class="tags-content" wx:if="{{summaryResult.tags.length > 0}}">
+      <view class="tag-item" wx:for="{{summaryResult.tags}}" wx:key="index">
+        {{item}}
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="result-actions">
+      <button class="btn-action" bindtap="copySummary">
+        <text class="btn-icon">📋</text>
+        <text class="btn-text">复制</text>
+      </button>
+      <button class="btn-action" bindtap="saveSummary">
+        <text class="btn-icon">💾</text>
+        <text class="btn-text">保存</text>
+      </button>
+      <button class="btn-action" bindtap="resetSummary">
+        <text class="btn-icon">🔄</text>
+        <text class="btn-text">重新总结</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="tips-section" wx:if="{{!summaryResult && !inputText}}">
+    <view class="tips-title">💡 使用提示</view>
+    <view class="tips-list">
+      <view class="tip-item">• 支持粘贴文章、报告、论文等长文本</view>
+      <view class="tip-item">• 自动检测剪贴板内容，快速导入</view>
+      <view class="tip-item">• 提供简要、详细、要点三种总结模式</view>
+      <view class="tip-item">• AI智能提取核心观点和关键信息</view>
+      <view class="tip-item">• 最多支持10000字的文本总结</view>
+    </view>
+  </view>
+</view>

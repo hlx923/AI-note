@@ -208,6 +208,103 @@ class StorageManager {
       return false
     }
   }
+
+  // 获取关联笔记推荐
+  static getRelatedNotes(noteId, limit = 5) {
+    try {
+      const currentNote = this.getNoteById(noteId)
+      if (!currentNote) return []
+
+      const allNotes = this.getAllNotes().filter(note => note.id !== noteId)
+
+      // 计算相关性得分
+      const scoredNotes = allNotes.map(note => {
+        let score = 0
+
+        // 1. 相同标签 +10分
+        if (note.tag === currentNote.tag) {
+          score += 10
+        }
+
+        // 2. 关键词匹配 每个匹配 +5分
+        if (currentNote.keywords && note.keywords) {
+          const matchedKeywords = currentNote.keywords.filter(k =>
+            note.keywords.includes(k)
+          )
+          score += matchedKeywords.length * 5
+        }
+
+        // 3. 标题相似度 (简单的词语匹配)
+        if (currentNote.title && note.title) {
+          const currentWords = this.extractWords(currentNote.title)
+          const noteWords = this.extractWords(note.title)
+          const matchedWords = currentWords.filter(w => noteWords.includes(w))
+          score += matchedWords.length * 3
+        }
+
+        // 4. 内容相似度 (关键词提取和匹配)
+        if (currentNote.content && note.content) {
+          const currentContentWords = this.extractKeywordsFromContent(currentNote.content)
+          const noteContentWords = this.extractKeywordsFromContent(note.content)
+          const matchedContentWords = currentContentWords.filter(w =>
+            noteContentWords.includes(w)
+          )
+          score += matchedContentWords.length * 2
+        }
+
+        // 5. 时间接近度 (同一天创建 +3分, 同一周 +1分)
+        const timeDiff = Math.abs(currentNote.createTime - note.createTime)
+        const dayDiff = timeDiff / (1000 * 60 * 60 * 24)
+        if (dayDiff < 1) {
+          score += 3
+        } else if (dayDiff < 7) {
+          score += 1
+        }
+
+        return { note, score }
+      })
+
+      // 按得分排序并返回前N个
+      return scoredNotes
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit)
+        .map(item => item.note)
+    } catch (error) {
+      console.error('获取关联笔记失败:', error)
+      return []
+    }
+  }
+
+  // 提取词语 (简单分词)
+  static extractWords(text) {
+    if (!text) return []
+    // 移除标点符号，按空格和中文分词
+    return text
+      .replace(/[，。！？、；：""''（）《》【】\s]/g, ' ')
+      .split(/\s+/)
+      .filter(word => word.length >= 2)
+  }
+
+  // 从内容中提取关键词
+  static extractKeywordsFromContent(content) {
+    if (!content) return []
+
+    // 简单的关键词提取：取出现频率较高的词
+    const words = this.extractWords(content)
+    const wordCount = {}
+
+    words.forEach(word => {
+      if (word.length >= 2) {
+        wordCount[word] = (wordCount[word] || 0) + 1
+      }
+    })
+
+    // 返回出现次数>=2的词
+    return Object.keys(wordCount)
+      .filter(word => wordCount[word] >= 2)
+      .slice(0, 10)
+  }
 }
 
 module.exports = StorageManager
