@@ -203,13 +203,18 @@ Page({
     showLoading('正在识别...')
 
     try {
+      console.log('开始上传音频文件:', filePath)
+
       // 上传音频文件到云存储
       const uploadResult = await wx.cloud.uploadFile({
         cloudPath: `voice/${Date.now()}.mp3`,
         filePath: filePath
       })
 
+      console.log('音频上传成功:', uploadResult.fileID)
+
       // 调用云函数进行语音识别，传入方言参数
+      console.log('调用云函数 voiceRecognition，方言:', this.data.dialect)
       const result = await wx.cloud.callFunction({
         name: 'voiceRecognition',
         data: {
@@ -220,24 +225,46 @@ Page({
 
       hideLoading()
 
-      console.log('云函数返回结果:', result)
+      console.log('云函数返回完整结果:', JSON.stringify(result))
 
-      if (result.result.success) {
+      if (result.result && result.result.success) {
         this.setData({
           recognizedText: result.result.text
         })
         showToast('识别完成', 'success')
       } else {
-        console.error('识别失败原因:', result.result.error)
-        showToast(`识别失败: ${result.result.error || '请手动输入'}`)
+        const errorMsg = result.result ? result.result.error : '云函数返回格式错误'
+        console.error('识别失败详情:', {
+          result: result,
+          error: errorMsg
+        })
+
+        // 显示详细错误信息
+        wx.showModal({
+          title: '识别失败',
+          content: `错误信息: ${errorMsg}\n\n可能原因:\n1. 云函数未部署\n2. 百度API密钥无效\n3. 网络连接问题\n\n请检查控制台日志查看详细信息`,
+          showCancel: false
+        })
+
         this.setData({
           recognizedText: ''
         })
       }
     } catch (error) {
-      console.error('语音识别错误', error)
+      console.error('语音识别异常:', {
+        message: error.message,
+        stack: error.stack,
+        error: error
+      })
       hideLoading()
-      showToast('识别失败，请手动输入')
+
+      // 显示详细错误信息
+      wx.showModal({
+        title: '识别异常',
+        content: `错误: ${error.message}\n\n可能原因:\n1. 云开发环境未初始化\n2. 云函数不存在或未部署\n3. 上传文件失败\n\n请检查:\n- 微信开发者工具是否开启云开发\n- 云函数是否已上传部署\n- 控制台日志中的详细错误`,
+        showCancel: false
+      })
+
       this.setData({
         recognizedText: ''
       })
