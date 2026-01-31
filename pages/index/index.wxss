@@ -6,7 +6,7 @@
 }
 
 .welcome-section {
-  padding: 60rpx 40rpx 40rpx;
+  padding: 40rpx 40rpx 20rpx;
   text-align: center;
 }
 
@@ -27,7 +27,7 @@
 .quick-actions {
   display: flex;
   justify-content: space-between;
-  padding: 0 30rpx 40rpx;
+  padding: 0 30rpx 20rpx;
   gap: 20rpx;
 }
 
@@ -35,7 +35,7 @@
   flex: 1;
   background: #FFFFFF;
   border-radius: 20rpx;
-  padding: 40rpx 20rpx;
+  padding: 30rpx 20rpx;
   text-align: center;
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
   transition: transform 0.2s;
@@ -46,8 +46,8 @@
 }
 
 .action-icon {
-  font-size: 64rpx;
-  margin-bottom: 16rpx;
+  font-size: 56rpx;
+  margin-bottom: 12rpx;
 }
 
 .action-title {
@@ -66,10 +66,10 @@
 
 /* 高级功能入口 */
 .advanced-actions {
-  padding: 0 30rpx 40rpx;
+  padding: 0 30rpx 20rpx;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  gap: 16rpx;
 }
 
 .advanced-card {
@@ -77,7 +77,7 @@
   align-items: center;
   background: #FFFFFF;
   border-radius: 20rpx;
-  padding: 32rpx;
+  padding: 24rpx;
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
   transition: transform 0.2s;
 }
@@ -87,8 +87,8 @@
 }
 
 .advanced-icon {
-  font-size: 56rpx;
-  margin-right: 24rpx;
+  font-size: 48rpx;
+  margin-right: 20rpx;
 }
 
 .advanced-info {
@@ -197,13 +197,13 @@
 
 .empty-state {
   text-align: center;
-  padding: 120rpx 40rpx;
+  padding: 60rpx 40rpx;
 }
 
 .empty-icon {
   display: block;
-  font-size: 120rpx;
-  margin-bottom: 24rpx;
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
 }
 
 .empty-text {
@@ -216,9 +216,9 @@
   display: flex;
   justify-content: space-around;
   background: #FFFFFF;
-  margin: 0 30rpx 40rpx;
+  margin: 0 30rpx 20rpx;
   border-radius: 16rpx;
-  padding: 32rpx 0;
+  padding: 24rpx 0;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 }
 
