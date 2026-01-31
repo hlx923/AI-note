@@ -1,5 +1,23 @@
 <!-- pages/record/voice/voice.wxml -->
 <view class="container">
+  <!-- 模式选择器 -->
+  <view class="mode-selector">
+    <view class="mode-current" bindtap="toggleModeSelector">
+      <text class="mode-label">{{mode === 'meeting' ? '会议纪要模式' : '普通模式'}}</text>
+      <text class="mode-icon">{{showModeSelector ? '▲' : '▼'}}</text>
+    </view>
+    <view class="mode-options" wx:if="{{showModeSelector}}">
+      <view class="mode-option" bindtap="selectMode" data-mode="normal">
+        <text class="option-name">普通模式</text>
+        <text class="option-desc">语音转文字并AI规整</text>
+      </view>
+      <view class="mode-option" bindtap="selectMode" data-mode="meeting">
+        <text class="option-name">会议纪要模式</text>
+        <text class="option-desc">支持多人发言标记</text>
+      </view>
+    </view>
+  </view>
+
   <!-- 录音状态显示 -->
   <view class="record-status">
     <view class="record-circle {{isRecording ? 'recording' : ''}}">
@@ -52,11 +70,34 @@
       <text class="result-length">{{recognizedText.length}}字</text>
     </view>
 
+    <!-- 会议纪要模式 - 说话人管理 -->
+    <view class="speaker-section" wx:if="{{mode === 'meeting'}}">
+      <view class="speaker-header">
+        <text class="speaker-title">说话人</text>
+        <button class="btn-add-speaker" bindtap="showAddSpeaker">+ 添加</button>
+      </view>
+
+      <view class="speaker-list" wx:if="{{speakers.length > 0}}">
+        <view class="speaker-item {{currentSpeaker === item ? 'active' : ''}}"
+              wx:for="{{speakers}}"
+              wx:key="index"
+              bindtap="selectSpeaker"
+              data-speaker="{{item}}">
+          <text class="speaker-name">{{item}}</text>
+          <text class="speaker-delete" catchtap="deleteSpeaker" data-speaker="{{item}}">×</text>
+        </view>
+      </view>
+
+      <button class="btn-insert-speaker" bindtap="insertSpeakerText" wx:if="{{currentSpeaker}}">
+        插入【{{currentSpeaker}}】发言
+      </button>
+    </view>
+
     <view class="result-content">
       <textarea
         class="result-textarea"
         value="{{recognizedText}}"
-        placeholder="请输入录音内容..."
+        placeholder="{{mode === 'meeting' ? '请输入会议内容，点击上方按钮插入说话人标记...' : '请输入录音内容...'}}"
         maxlength="-1"
         auto-height
         bindinput="onTextInput"
@@ -64,12 +105,35 @@
     </view>
 
     <view class="result-actions">
-      <button class="btn-primary" bindtap="organizeNote">
-        AI规整并保存
+      <button class="btn-primary" bindtap="{{mode === 'meeting' ? 'saveMeeting' : 'organizeNote'}}">
+        {{mode === 'meeting' ? '保存会议纪要' : 'AI规整并保存'}}
       </button>
-      <button class="btn-secondary" bindtap="manualSave">
+      <button class="btn-secondary" bindtap="manualSave" wx:if="{{mode === 'normal'}}">
         直接保存
       </button>
+    </view>
+  </view>
+
+  <!-- 说话人添加弹窗 -->
+  <view class="modal-mask" wx:if="{{showSpeakerModal}}" bindtap="hideSpeakerModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">添加说话人</text>
+        <text class="modal-close" bindtap="hideSpeakerModal">×</text>
+      </view>
+      <view class="modal-body">
+        <input
+          class="speaker-input"
+          placeholder="请输入姓名"
+          value="{{newSpeakerName}}"
+          bindinput="onSpeakerNameInput"
+          maxlength="10"
+        />
+      </view>
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="hideSpeakerModal">取消</button>
+        <button class="btn-confirm" bindtap="addSpeaker">确定</button>
+      </view>
     </view>
   </view>
 

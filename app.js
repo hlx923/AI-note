@@ -4,7 +4,7 @@ App({
     // 初始化云开发环境
     if (wx.cloud) {
       wx.cloud.init({
-        env: 'your-new-env-id', // 替换为新的环境ID
+        env: 'ai-note-assistant-cloud-6c38d18a',
         traceUser: true
       })
     }

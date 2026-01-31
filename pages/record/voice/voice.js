@@ -315,5 +315,132 @@ Page({
     const min = Math.floor(seconds / 60)
     const sec = seconds % 60
     return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`
+  },
+
+  // 切换模式选择器
+  toggleModeSelector() {
+    this.setData({
+      showModeSelector: !this.data.showModeSelector
+    })
+  },
+
+  // 选择模式
+  selectMode(e) {
+    const mode = e.currentTarget.dataset.mode
+    this.setData({
+      mode,
+      showModeSelector: false,
+      recognizedText: '',
+      speakers: mode === 'meeting' ? [] : this.data.speakers
+    })
+  },
+
+  // 显示说话人弹窗
+  showAddSpeaker() {
+    this.setData({
+      showSpeakerModal: true,
+      newSpeakerName: ''
+    })
+  },
+
+  // 隐藏说话人弹窗
+  hideSpeakerModal() {
+    this.setData({
+      showSpeakerModal: false,
+      newSpeakerName: ''
+    })
+  },
+
+  // 说话人名称输入
+  onSpeakerNameInput(e) {
+    this.setData({
+      newSpeakerName: e.detail.value
+    })
+  },
+
+  // 添加说话人
+  addSpeaker() {
+    const name = this.data.newSpeakerName.trim()
+    if (!name) {
+      showToast('请输入说话人姓名')
+      return
+    }
+
+    if (this.data.speakers.includes(name)) {
+      showToast('该说话人已存在')
+      return
+    }
+
+    this.setData({
+      speakers: [...this.data.speakers, name],
+      showSpeakerModal: false,
+      newSpeakerName: ''
+    })
+    showToast('添加成功', 'success')
+  },
+
+  // 选择说话人
+  selectSpeaker(e) {
+    const speaker = e.currentTarget.dataset.speaker
+    this.setData({
+      currentSpeaker: speaker
+    })
+  },
+
+  // 插入说话人标记
+  insertSpeakerText() {
+    if (!this.data.currentSpeaker) {
+      showToast('请先选择说话人')
+      return
+    }
+
+    const speakerTag = `\n【${this.data.currentSpeaker}】：`
+    this.setData({
+      recognizedText: this.data.recognizedText + speakerTag
+    })
+  },
+
+  // 删除说话人
+  deleteSpeaker(e) {
+    const speaker = e.currentTarget.dataset.speaker
+    const speakers = this.data.speakers.filter(s => s !== speaker)
+    this.setData({
+      speakers,
+      currentSpeaker: this.data.currentSpeaker === speaker ? '' : this.data.currentSpeaker
+    })
+    showToast('已删除', 'success')
+  },
+
+  // 保存会议纪要
+  async saveMeeting() {
+    if (!this.data.recognizedText) {
+      showToast('没有可保存的内容')
+      return
+    }
+
+    const note = {
+      title: `【会议纪要】${new Date().toLocaleDateString()}`,
+      content: this.data.recognizedText,
+      tag: '会议',
+      keywords: ['会议', ...this.data.speakers],
+      type: 'meeting',
+      meetingData: {
+        speakers: this.data.speakers,
+        date: new Date().toISOString()
+      }
+    }
+
+    const savedNote = StorageManager.saveNote(note)
+
+    if (savedNote) {
+      showToast('保存成功', 'success')
+      setTimeout(() => {
+        wx.navigateTo({
+          url: `/pages/note/detail/detail?id=${savedNote.id}`
+        })
+      }, 1500)
+    } else {
+      showToast('保存失败')
+    }
   }
 })
