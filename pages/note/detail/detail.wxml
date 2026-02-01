@@ -93,13 +93,16 @@
 
   <!-- 操作按钮 -->
   <view class="action-buttons">
-    <view wx:if="{{!isEditing}}" class="button-group">
-      <button class="btn-secondary" bindtap="startEdit">编辑</button>
-      <button class="btn-secondary" bindtap="copyContent">复制</button>
-      <button class="btn-secondary" bindtap="exportNote">导出</button>
-      <button class="btn-secondary" bindtap="shareToWeChat">分享</button>
-      <button class="btn-secondary" bindtap="lockNote" wx:if="{{!note.isLocked}}">锁定</button>
-      <button class="btn-ghost" bindtap="deleteNote">删除</button>
+    <view wx:if="{{!isEditing}}">
+      <view class="button-group">
+        <button class="btn-secondary" bindtap="startEdit">编辑</button>
+        <button class="btn-secondary" bindtap="copyContent">复制</button>
+        <button class="btn-secondary" bindtap="exportNote">导出</button>
+        <button class="btn-secondary" bindtap="shareToWeChat">分享</button>
+      </view>
+      <view class="delete-button-group">
+        <button class="btn-delete" bindtap="deleteNote">删除</button>
+      </view>
     </view>
 
     <view wx:if="{{isEditing}}" class="button-group">

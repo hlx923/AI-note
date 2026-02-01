@@ -1,6 +1,5 @@
 // pages/record/handwrite/handwrite.js
 const StorageManager = require('../../../utils/storage.js')
-const APIManager = require('../../../utils/api.js')
 const { showToast, showLoading, hideLoading, showConfirm } = require('../../../utils/util.js')
 
 Page({
@@ -13,10 +12,11 @@ Page({
     lastY: 0,
     lineWidth: 3,
     lineColor: '#000000',
-    colors: ['#000000', '#FF0000', '#0000FF', '#00AA00', '#FF6600'],
+    colors: ['#000000', '#FF0000', '#0000FF', '#00AA00', '#FF6600', '#FFFF00', '#FF00FF', '#00FFFF'],
     lineWidths: [2, 3, 5, 8],
-    recognizedText: '',
-    hasDrawing: false
+    inspirationText: '',
+    hasDrawing: false,
+    drawingHistory: []
   },
 
   onLoad() {
@@ -83,6 +83,50 @@ Page({
     this.setData({
       isDrawing: false
     })
+    // 保存当前画布状态用于撤销
+    this.saveDrawingState()
+  },
+
+  // 保存绘画状态
+  saveDrawingState() {
+    wx.canvasToTempFilePath({
+      canvasId: 'handwriteCanvas',
+      success: (res) => {
+        const history = this.data.drawingHistory
+        history.push(res.tempFilePath)
+        // 只保留最近10个状态
+        if (history.length > 10) {
+          history.shift()
+        }
+        this.setData({ drawingHistory: history })
+      }
+    }, this)
+  },
+
+  // 撤销绘画
+  undoDrawing() {
+    const history = this.data.drawingHistory
+    if (history.length === 0) {
+      showToast('没有可撤销的操作')
+      return
+    }
+
+    // 移除最后一个状态
+    history.pop()
+    this.setData({ drawingHistory: history })
+
+    const ctx = this.data.ctx
+    ctx.clearRect(0, 0, this.data.canvasWidth, this.data.canvasHeight)
+
+    if (history.length > 0) {
+      // 恢复到上一个状态
+      const lastState = history[history.length - 1]
+      ctx.drawImage(lastState, 0, 0, this.data.canvasWidth, this.data.canvasHeight)
+      ctx.draw()
+    } else {
+      ctx.draw()
+      this.setData({ hasDrawing: false })
+    }
   },
 
   // 选择颜色
@@ -112,140 +156,71 @@ Page({
       ctx.draw()
       this.setData({
         hasDrawing: false,
-        recognizedText: ''
+        inspirationText: '',
+        drawingHistory: []
       })
     }
   },
 
-  // 开始识别
-  async startRecognize() {
+  // 输入灵感描述
+  onInspirationInput(e) {
+    this.setData({
+      inspirationText: e.detail.value
+    })
+  },
+
+  // 保存灵感
+  async saveInspiration() {
     if (!this.data.hasDrawing) {
-      showToast('请先手写内容')
+      showToast('请先绘画')
       return
     }
 
-    showLoading('正在识别...')
+    if (!this.data.inspirationText.trim()) {
+      showToast('请输入灵感描述')
+      return
+    }
+
+    showLoading('正在保存...')
 
     try {
       // 将canvas转为图片
       wx.canvasToTempFilePath({
         canvasId: 'handwriteCanvas',
-        success: async (res) => {
-          // 调用手写识别API
-          const result = await APIManager.handwritingOCR(res.tempFilePath)
+        success: (res) => {
+          // 保存笔记
+          const note = {
+            title: this.data.inspirationText.substring(0, 20) + (this.data.inspirationText.length > 20 ? '...' : ''),
+            content: this.data.inspirationText,
+            tag: '灵感',
+            type: 'drawing',
+            images: [res.tempFilePath]
+          }
 
+          const savedNote = StorageManager.saveNote(note)
           hideLoading()
 
-          if (result.success && result.text) {
-            this.setData({
-              recognizedText: result.text
-            })
-            this.showOrganizePrompt()
+          if (savedNote) {
+            showToast('保存成功', 'success')
+            setTimeout(() => {
+              wx.navigateTo({
+                url: `/pages/note/detail/detail?id=${savedNote.id}`
+              })
+            }, 1500)
           } else {
-            // 使用模拟数据
-            this.setData({
-              recognizedText: '这是模拟的手写识别结果。\n\n在实际应用中，这里会显示从手写内容中识别出的文字。'
-            })
-            this.showOrganizePrompt()
+            showToast('保存失败')
           }
         },
         fail: (err) => {
-          console.error('转换图片失败', err)
+          console.error('保存图片失败', err)
           hideLoading()
-          showToast('识别失败，请重试')
+          showToast('保存失败，请重试')
         }
       }, this)
     } catch (error) {
-      console.error('识别错误', error)
+      console.error('保存错误', error)
       hideLoading()
-      showToast('识别失败')
-    }
-  },
-
-  // 显示规整提示
-  async showOrganizePrompt() {
-    const confirm = await showConfirm('识别完成，是否进行AI规整？', '提示')
-    if (confirm) {
-      this.organizeNote()
-    }
-  },
-
-  // AI规整笔记
-  async organizeNote() {
-    if (!this.data.recognizedText) {
-      showToast('没有可规整的内容')
-      return
-    }
-
-    showLoading('正在规整...')
-
-    try {
-      const result = await APIManager.analyzeText(this.data.recognizedText)
-      hideLoading()
-
-      if (result.success) {
-        // 保存笔记
-        const note = {
-          title: result.title,
-          content: this.data.recognizedText,
-          tag: result.tag,
-          keywords: result.keywords,
-          todos: result.todos,
-          type: 'handwrite'
-        }
-
-        const savedNote = StorageManager.saveNote(note)
-
-        if (savedNote) {
-          showToast('保存成功', 'success')
-          setTimeout(() => {
-            wx.navigateTo({
-              url: `/pages/note/detail/detail?id=${savedNote.id}`
-            })
-          }, 1500)
-        } else {
-          showToast('保存失败')
-        }
-      } else {
-        showToast('规整失败')
-      }
-    } catch (error) {
-      console.error('规整错误', error)
-      hideLoading()
-      showToast('规整失败')
-    }
-  },
-
-  // 手动保存
-  async manualSave() {
-    if (!this.data.recognizedText) {
-      showToast('没有可保存的内容')
-      return
-    }
-
-    const note = {
-      title: this.data.recognizedText.substring(0, 20) + '...',
-      content: this.data.recognizedText,
-      tag: '生活',
-      type: 'handwrite'
-    }
-
-    const savedNote = StorageManager.saveNote(note)
-
-    if (savedNote) {
-      showToast('保存成功', 'success')
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 1500)
-    } else {
       showToast('保存失败')
     }
-  },
-
-  // 修改识别文字
-  onTextInput(e) {
-    this.setData({
-      recognizedText: e.detail.value
-    })
   }
 })

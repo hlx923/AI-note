@@ -54,8 +54,8 @@ App({
     apiConfig: {
       // 百度OCR API
       baiduOCR: {
-        apiKey: 'GZGnYAGwGfQQGvGZvAjGZvGZGZGZGZGZ',
-        secretKey: 'GZGZGZGZGZGZGZGZGZGZGZGZGZGZGZGv'
+        apiKey: 'RhWDUvnTrl4HaQOEN19nz2wc',
+        secretKey: 'L6DH01ebaTJJB1BCi11yDOHPIUznqAA5'
       },
       // 语音转写API（可使用微信原生或第三方）
       voiceAPI: {

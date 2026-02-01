@@ -1,0 +1,332 @@
+/* pages/record/template/template.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4A90E2 0%, #E8F4F8 100%);
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 模板选择页 */
+.template-select {
+  width: 100%;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 50rpx;
+  padding: 20rpx 0;
+}
+
+.page-title {
+  display: block;
+  font-size: 52rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 16rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+  letter-spacing: 2rpx;
+}
+
+.page-desc {
+  display: block;
+  font-size: 30rpx;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.1);
+  letter-spacing: 1rpx;
+}
+
+.template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.template-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 36rpx 32rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+.template-card:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
+}
+
+.template-icon {
+  font-size: 68rpx;
+  margin-right: 28rpx;
+  line-height: 1;
+}
+
+.template-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.template-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 0.5rpx;
+}
+
+.template-desc {
+  font-size: 26rpx;
+  color: #999;
+  letter-spacing: 0.5rpx;
+}
+
+.template-arrow {
+  font-size: 52rpx;
+  color: #ddd;
+  font-weight: 300;
+}
+
+/* 模板表单 */
+.template-form {
+  width: 100%;
+  padding-bottom: 40rpx;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 40rpx;
+  padding: 20rpx 0;
+}
+
+.form-icon {
+  display: block;
+  font-size: 88rpx;
+  margin-bottom: 16rpx;
+  line-height: 1;
+}
+
+.form-title {
+  display: block;
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+  letter-spacing: 2rpx;
+}
+
+.form-section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.section-label {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+  letter-spacing: 0.5rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  width: 100%;
+  min-height: 220rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+/* 待办列表 */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.todo-input {
+  flex: 1;
+  height: 76rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.todo-delete {
+  width: 64rpx;
+  height: 64rpx;
+  background: #ff4444;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* 购物清单 */
+.shopping-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.shopping-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.shopping-name {
+  flex: 2;
+  height: 76rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.shopping-quantity {
+  flex: 1;
+  height: 76rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: #333;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.shopping-delete {
+  width: 64rpx;
+  height: 64rpx;
+  background: #ff4444;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.btn-add-todo {
+  width: 100%;
+  height: 76rpx;
+  background: #667eea;
+  color: #fff;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  text-align: center;
+  margin-top: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-add-todo:active {
+  opacity: 0.85;
+}
+
+/* 日期选择器 */
+.picker-view {
+  height: 88rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: #333;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* 表单操作按钮 */
+.form-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 60rpx;
+  padding: 0 10rpx;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-cancel,
+.btn-save {
+  flex: 1;
+  height: 96rpx;
+  border-radius: 48rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-cancel::after,
+.btn-save::after {
+  border: none;
+}
+
+.btn-cancel {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+}
+
+.btn-save {
+  background: #fff;
+  color: #667eea;
+}
+
+.btn-cancel:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.btn-save:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}

@@ -1,3 +1,6 @@
 {
+  "navigationBarTitleText": "长文总结",
+  "navigationBarBackgroundColor": "#4A90E2",
+  "navigationBarTextStyle": "white",
   "usingComponents": {}
 }

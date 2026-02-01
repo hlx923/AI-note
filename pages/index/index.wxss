@@ -247,12 +247,12 @@
   bottom: 120rpx;
   width: 120rpx;
   height: 120rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #9ed1eb;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8rpx 24rpx rgba(255, 255, 255, 0.614);
   z-index: 100;
   transition: transform 0.3s;
 }
@@ -308,54 +308,77 @@
 }
 
 .quick-record-body {
-  padding: 60rpx 32rpx;
-  text-align: center;
+  padding: 32rpx;
 }
 
-.quick-record-circle {
-  width: 200rpx;
-  height: 200rpx;
-  margin: 0 auto 32rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
-  transition: all 0.3s;
-}
-
-.quick-record-circle.recording {
-  animation: pulse 1.5s infinite;
-  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.6);
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.quick-record-icon {
-  font-size: 80rpx;
-}
-
-.quick-record-time {
-  display: block;
-  font-size: 48rpx;
-  font-weight: 700;
+.input-label {
+  font-size: 28rpx;
+  font-weight: 600;
   color: #333;
-  margin-bottom: 16rpx;
-  font-family: 'Courier New', monospace;
+  margin-bottom: 12rpx;
 }
 
-.quick-record-hint {
-  display: block;
+.quick-todo-input {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  background: #F8F8F8;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.quick-todo-info {
+  margin-top: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-row-type {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.info-label {
   font-size: 26rpx;
-  color: #999;
+  color: #666;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.tag-selector {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.tag-option {
+  padding: 12rpx 24rpx;
+  background: #FFFFFF;
+  border: 2rpx solid #4A90E2;
+  color: #4A90E2;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  transition: all 0.2s;
+}
+
+.tag-option.active {
+  background: #4A90E2;
+  color: #FFFFFF;
 }
 
 .quick-record-footer {
@@ -366,11 +389,14 @@
 .btn-quick-record {
   width: 100%;
   height: 88rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #4A90E2;
   color: #FFFFFF;
   border: none;
   border-radius: 12rpx;
   font-size: 32rpx;
   font-weight: 600;
-  line-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }

@@ -156,9 +156,9 @@ class StorageManager {
   static getAllTags() {
     try {
       const tagsKey = this.getUserKey('tags')
-      return wx.getStorageSync(tagsKey) || ['学习', '工作', '生活', '灵感']
+      return wx.getStorageSync(tagsKey) || ['待办', '学习', '工作', '生活', '灵感']
     } catch (error) {
-      return ['学习', '工作', '生活', '灵感']
+      return ['待办', '学习', '工作', '生活', '灵感']
     }
   }
 

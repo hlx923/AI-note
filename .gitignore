@@ -1,0 +1,76 @@
+# 微信小程序 .gitignore
+
+# 个人配置文件（包含AppID等敏感信息）
+project.private.config.json
+project.config.json
+
+# API密钥配置
+utils/config.js
+config.js
+apiConfig.json
+
+# 用户数据
+*.db
+*.sqlite
+
+# 微信开发者工具生成的文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 依赖目录
+node_modules/
+miniprogram_npm/
+
+# 云函数
+cloudfunctions/*/node_modules/
+cloudfunctions/*/.DS_Store
+
+# 编译输出
+dist/
+build/
+
+# 临时文件
+*.tmp
+*.temp
+.cache/
+
+# IDE配置
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 备份文件
+*.bak
+*.backup
+
+# 测试文件
+test/
+tests/
+__tests__/
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 打包文件
+*.zip
+*.tar.gz
+*.rar

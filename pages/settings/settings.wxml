@@ -102,12 +102,37 @@
         <text class="item-arrow">›</text>
       </view>
     </view>
-    <view class="setting-item" bindtap="showHelp">
+  </view>
+
+  <view class="settings-section">
+    <text class="section-title">功能介绍</text>
+    <view class="setting-item">
       <view class="item-left">
-        <text class="item-icon">❓</text>
-        <text class="item-label">使用帮助</text>
+        <text class="item-icon">📷</text>
+        <text class="item-label">拍照记笔记</text>
       </view>
-      <text class="item-arrow">›</text>
+      <text class="item-desc">记录图片笔记</text>
+    </view>
+    <view class="setting-item">
+      <view class="item-left">
+        <text class="item-icon">✍️</text>
+        <text class="item-label">手写涂鸦</text>
+      </view>
+      <text class="item-desc">手写自如畅整</text>
+    </view>
+    <view class="setting-item">
+      <view class="item-left">
+        <text class="item-icon">📄</text>
+        <text class="item-label">长文总结</text>
+      </view>
+      <text class="item-desc">AI智能提取核心观点</text>
+    </view>
+    <view class="setting-item">
+      <view class="item-left">
+        <text class="item-icon">📋</text>
+        <text class="item-label">模板笔记</text>
+      </view>
+      <text class="item-desc">场景化模板快速记录</text>
     </view>
   </view>
 

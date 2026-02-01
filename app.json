@@ -5,7 +5,7 @@
     "pages/record/photo/photo",
     "pages/record/handwrite/handwrite",
     "pages/record/summary/summary",
-    "pages/record/document/document",
+    "pages/record/template/template",
     "pages/note/detail/detail",
     "pages/note/list/list",
     "pages/search/search",
@@ -23,6 +23,7 @@
     "selectedColor": "#4A90E2",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "black",
+    "fontSize": "12px",
     "list": [
       {
         "pagePath": "pages/index/index",

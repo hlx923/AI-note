@@ -7,16 +7,10 @@
 
   <!-- 快速录入入口 -->
   <view class="quick-actions">
-    <view class="action-card" bindtap="goToVoiceRecord">
-      <view class="action-icon">🎤</view>
-      <text class="action-title">语音速记</text>
-      <text class="action-desc">一句话快速记录</text>
-    </view>
-
     <view class="action-card" bindtap="goToPhotoRecord">
       <view class="action-icon">📷</view>
       <text class="action-title">拍照记笔记</text>
-      <text class="action-desc">OCR智能识别</text>
+      <text class="action-desc">记录图片笔记</text>
     </view>
 
     <view class="action-card" bindtap="goToHandwrite">
@@ -37,11 +31,11 @@
       <text class="advanced-arrow">›</text>
     </view>
 
-    <view class="advanced-card" bindtap="goToDocument">
-      <view class="advanced-icon">📁</view>
+    <view class="advanced-card" bindtap="goToTemplate">
+      <view class="advanced-icon">📋</view>
       <view class="advanced-info">
-        <text class="advanced-title">文档增强</text>
-        <text class="advanced-desc">上传文档智能提取要点</text>
+        <text class="advanced-title">模板笔记</text>
+        <text class="advanced-desc">场景化模板快速记录</text>
       </view>
       <text class="advanced-arrow">›</text>
     </view>
@@ -93,32 +87,53 @@
     <text class="fab-icon">💡</text>
   </view>
 
-  <!-- 快速录音弹窗 -->
+  <!-- 快速待办弹窗 -->
   <view class="quick-record-modal" wx:if="{{showQuickRecord}}" bindtap="hideQuickRecordModal">
-    <view class="quick-record-content" catchtap="">
+    <view class="quick-record-content" catchtap="doNothing">
       <view class="quick-record-header">
-        <text class="quick-record-title">灵感闪记</text>
+        <text class="quick-record-title">快速待办</text>
         <text class="quick-record-close" bindtap="hideQuickRecordModal">×</text>
       </view>
 
       <view class="quick-record-body">
-        <view class="quick-record-circle {{isQuickRecording ? 'recording' : ''}}">
-          <text class="quick-record-icon">🎤</text>
+        <view class="input-label">待办事件</view>
+        <textarea
+          class="quick-todo-input"
+          value="{{quickTodoContent}}"
+          placeholder="请输入待办事项..."
+          maxlength="-1"
+          auto-height
+          bindinput="onQuickTodoInput"
+          cursor-spacing="100"
+          adjust-position="{{true}}"
+          show-confirm-bar="{{false}}"
+        />
+
+        <view class="quick-todo-info">
+          <view class="info-row">
+            <text class="info-label">记录时间</text>
+            <text class="info-value">{{quickRecordTime}}</text>
+          </view>
+          <view class="info-row-type">
+            <text class="info-label">记录类型</text>
+            <view class="tag-selector">
+              <view
+                class="tag-option {{quickTodoTag === item ? 'active' : ''}}"
+                wx:for="{{['待办', '学习', '工作', '生活', '灵感']}}"
+                wx:key="index"
+                bindtap="selectQuickTodoTag"
+                data-tag="{{item}}"
+              >
+                {{item}}
+              </view>
+            </view>
+          </view>
         </view>
-
-        <text class="quick-record-time">{{formatQuickTime(quickRecordTime)}}</text>
-
-        <text class="quick-record-hint" wx:if="{{!isQuickRecording}}">
-          点击下方按钮开始录音
-        </text>
-        <text class="quick-record-hint" wx:if="{{isQuickRecording}}">
-          正在录音中...
-        </text>
       </view>
 
       <view class="quick-record-footer">
-        <button class="btn-quick-record" bindtap="{{isQuickRecording ? 'stopQuickRecord' : 'startQuickRecord'}}">
-          {{isQuickRecording ? '完成录音' : '开始录音'}}
+        <button class="btn-quick-record" bindtap="saveQuickTodo">
+          保存待办
         </button>
       </view>
     </view>

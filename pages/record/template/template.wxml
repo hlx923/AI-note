@@ -1,0 +1,158 @@
+<!-- pages/record/template/template.wxml -->
+<view class="container">
+  <!-- 模板选择页 -->
+  <view class="template-select" wx:if="{{selectedTemplate === ''}}">
+    <view class="page-header">
+      <text class="page-title">选择笔记模板</text>
+      <text class="page-desc">根据场景选择合适的模板</text>
+    </view>
+
+    <view class="template-list">
+      <!-- 学习笔记模板 -->
+      <view class="template-card" bindtap="selectTemplate" data-type="study">
+        <view class="template-icon">📚</view>
+        <view class="template-info">
+          <text class="template-title">学习笔记</text>
+          <text class="template-desc">知识点 · 错题 · 考点</text>
+        </view>
+        <text class="template-arrow">›</text>
+      </view>
+
+      <!-- 工作待办模板 -->
+      <view class="template-card" bindtap="selectTemplate" data-type="work">
+        <view class="template-icon">💼</view>
+        <view class="template-info">
+          <text class="template-title">工作待办</text>
+          <text class="template-desc">待做 · 已做 · 截止时间</text>
+        </view>
+        <text class="template-arrow">›</text>
+      </view>
+
+      <!-- 生活清单模板 -->
+      <view class="template-card" bindtap="selectTemplate" data-type="life">
+        <view class="template-icon">🏠</view>
+        <view class="template-info">
+          <text class="template-title">生活清单</text>
+          <text class="template-desc">购物 · 出行 · 打卡</text>
+        </view>
+        <text class="template-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学习笔记表单 -->
+  <view class="template-form" wx:elif="{{selectedTemplate === 'study'}}">
+    <view class="form-header">
+      <text class="form-icon">📚</text>
+      <text class="form-title">学习笔记</text>
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">笔记标题</text>
+      <input class="form-input" placeholder="请输入标题" value="{{formData.title}}" bindinput="onTitleInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">知识点</text>
+      <textarea class="form-textarea" placeholder="记录重要知识点..." value="{{formData.knowledge}}" bindinput="onKnowledgeInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">错题记录</text>
+      <textarea class="form-textarea" placeholder="记录错题和解析..." value="{{formData.mistakes}}" bindinput="onMistakesInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">考点总结</text>
+      <textarea class="form-textarea" placeholder="总结考试重点..." value="{{formData.keyPoints}}" bindinput="onKeyPointsInput" />
+    </view>
+
+    <view class="form-actions">
+      <button class="btn-cancel" bindtap="cancelTemplate">取消</button>
+      <button class="btn-save" bindtap="saveNote">保存</button>
+    </view>
+  </view>
+
+  <!-- 工作待办表单 -->
+  <view class="template-form" wx:elif="{{selectedTemplate === 'work'}}">
+    <view class="form-header">
+      <text class="form-icon">💼</text>
+      <text class="form-title">工作待办</text>
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">任务标题</text>
+      <input class="form-input" placeholder="请输入任务标题" value="{{formData.title}}" bindinput="onTitleInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">待做事项</text>
+      <view class="todo-list">
+        <view class="todo-item" wx:for="{{formData.todoList}}" wx:key="index">
+          <input class="todo-input" placeholder="输入待办事项" value="{{item}}" bindinput="onTodoInput" data-index="{{index}}" />
+          <text class="todo-delete" bindtap="deleteTodo" data-index="{{index}}">×</text>
+        </view>
+        <button class="btn-add-todo" bindtap="addTodo">+ 添加待办</button>
+      </view>
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">已完成事项</text>
+      <textarea class="form-textarea" placeholder="记录已完成的任务..." value="{{formData.doneList}}" bindinput="onDoneInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">截止时间</text>
+      <picker mode="date" value="{{formData.deadline}}" bindchange="onDeadlineChange">
+        <view class="picker-view">
+          {{formData.deadline || '选择截止日期'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-actions">
+      <button class="btn-cancel" bindtap="cancelTemplate">取消</button>
+      <button class="btn-save" bindtap="saveNote">保存</button>
+    </view>
+  </view>
+
+  <!-- 生活清单表单 -->
+  <view class="template-form" wx:elif="{{selectedTemplate === 'life'}}">
+    <view class="form-header">
+      <text class="form-icon">🏠</text>
+      <text class="form-title">生活清单</text>
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">清单标题</text>
+      <input class="form-input" placeholder="请输入标题" value="{{formData.title}}" bindinput="onTitleInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">购物清单</text>
+      <view class="shopping-list">
+        <view class="shopping-item" wx:for="{{formData.shoppingList}}" wx:key="index">
+          <input class="shopping-name" placeholder="物品名称" value="{{item.name}}" bindinput="onShoppingNameInput" data-index="{{index}}" />
+          <input class="shopping-quantity" type="number" placeholder="数量" value="{{item.quantity}}" bindinput="onShoppingQuantityInput" data-index="{{index}}" />
+          <text class="shopping-delete" bindtap="deleteShoppingItem" data-index="{{index}}">×</text>
+        </view>
+        <button class="btn-add-todo" bindtap="addShoppingItem">+ 添加物品</button>
+      </view>
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">出行计划</text>
+      <textarea class="form-textarea" placeholder="记录出行安排..." value="{{formData.travel}}" bindinput="onTravelInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-label">打卡记录</text>
+      <textarea class="form-textarea" placeholder="记录打卡内容..." value="{{formData.checkin}}" bindinput="onCheckinInput" />
+    </view>
+
+    <view class="form-actions">
+      <button class="btn-cancel" bindtap="cancelTemplate">取消</button>
+      <button class="btn-save" bindtap="saveNote">保存</button>
+    </view>
+  </view>
+</view>

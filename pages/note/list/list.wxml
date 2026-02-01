@@ -23,8 +23,22 @@
       </view>
     </scroll-view>
 
+    <!-- 溢出箭头：当标签溢出时显示，点击展开下拉菜单查看被隐藏的标签 -->
+    <view class="more-arrow" wx:if="{{showMoreArrow}}" bindtap="toggleOverflowMenu">
+      <text>▾</text>
+    </view>
+
     <view class="filter-icon" bindtap="showFilterMenu">
       <text>筛选</text>
+    </view>
+  </view>
+
+  <!-- 溢出标签下拉菜单 -->
+  <view class="overflow-mask" wx:if="{{showOverflowMenu}}" bindtap="closeOverflowMenu">
+    <view class="overflow-menu" catchtap="stopPropagation">
+      <view class="overflow-item" wx:for="{{overflowTags}}" wx:key="index" bindtap="selectOverflowTag" data-tag="{{item}}">
+        {{item}}
+      </view>
     </view>
   </view>
 
@@ -112,10 +126,6 @@
 <!-- 创建菜单 -->
 <view class="modal-mask" wx:if="{{showCreate}}" bindtap="hideCreateMenu">
   <view class="create-menu" catchtap="stopPropagation">
-    <view class="create-item" bindtap="goToVoiceRecord">
-      <view class="create-icon">🎤</view>
-      <text class="create-text">语音速记</text>
-    </view>
     <view class="create-item" bindtap="goToPhotoRecord">
       <view class="create-icon">📷</view>
       <text class="create-text">拍照记笔记</text>

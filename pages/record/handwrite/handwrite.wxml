@@ -13,7 +13,7 @@
     />
 
     <view class="canvas-placeholder" wx:if="{{!hasDrawing}}">
-      <text class="placeholder-text">✍️ 在此区域手写内容</text>
+      <text class="placeholder-text">🎨 在此区域自由绘画</text>
     </view>
   </view>
 
@@ -55,48 +55,46 @@
       <button class="btn-ghost btn-small" bindtap="clearCanvas">
         清空
       </button>
-      <button class="btn-primary btn-small" bindtap="startRecognize" disabled="{{!hasDrawing}}">
-        识别
+      <button class="btn-secondary btn-small" bindtap="undoDrawing" disabled="{{!hasDrawing}}">
+        撤销
       </button>
     </view>
   </view>
 
-  <!-- 识别结果 -->
-  <view class="result-section" wx:if="{{recognizedText}}">
-    <view class="result-header">
-      <text class="result-title">识别结果</text>
-      <text class="result-hint">可手动修改</text>
+  <!-- 灵感描述 -->
+  <view class="inspiration-section" wx:if="{{hasDrawing}}">
+    <view class="inspiration-header">
+      <text class="inspiration-title">灵感描述</text>
+      <text class="inspiration-length">{{inspirationText.length}}字</text>
     </view>
 
-    <view class="result-content">
+    <view class="inspiration-content">
       <textarea
-        class="result-textarea"
-        value="{{recognizedText}}"
-        placeholder="识别结果将显示在这里"
+        class="inspiration-textarea"
+        value="{{inspirationText}}"
+        placeholder="描述一下你的创作灵感..."
         maxlength="-1"
         auto-height
-        bindinput="onTextInput"
+        bindinput="onInspirationInput"
+        placeholder-class="textarea-placeholder"
       />
     </view>
 
-    <view class="result-actions">
-      <button class="btn-primary" bindtap="organizeNote">
-        AI规整并保存
-      </button>
-      <button class="btn-secondary" bindtap="manualSave">
-        直接保存
+    <view class="inspiration-actions">
+      <button class="btn-primary" bindtap="saveInspiration">
+        保存灵感
       </button>
     </view>
   </view>
 
   <!-- 使用提示 -->
-  <view class="tips-section" wx:if="{{!hasDrawing && !recognizedText}}">
+  <view class="tips-section" wx:if="{{!hasDrawing}}">
     <view class="tips-title">💡 使用提示</view>
     <view class="tips-list">
-      <view class="tip-item">• 支持切换笔迹颜色和粗细</view>
-      <view class="tip-item">• 写错可清空重新书写</view>
-      <view class="tip-item">• 识别后可手动修改文字</view>
-      <view class="tip-item">• AI自动规整并分类笔记</view>
+      <view class="tip-item">• 支持多种颜色和笔触粗细</view>
+      <view class="tip-item">• 可随时清空或撤销上一笔</view>
+      <view class="tip-item">• 绘画完成后添加灵感描述</view>
+      <view class="tip-item">• 作品将保存为灵感笔记</view>
     </view>
   </view>
 </view>

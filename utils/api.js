@@ -5,11 +5,15 @@ class APIManager {
   // 百度OCR文字识别
   static async baiduOCR(imagePath) {
     try {
+      console.log('开始OCR识别，图片路径:', imagePath)
+
       // 1. 获取access_token
       const token = await this.getBaiduAccessToken()
+      console.log('获取access_token成功')
 
       // 2. 将图片转为base64
       const base64Image = await this.imageToBase64(imagePath)
+      console.log('图片转base64成功，长度:', base64Image.length)
 
       // 3. 调用OCR接口
       return new Promise((resolve, reject) => {
@@ -25,14 +29,28 @@ class APIManager {
             language_type: 'CHN_ENG'
           },
           success: (res) => {
-            if (res.data.words_result) {
+            console.log('OCR API响应:', res)
+
+            // 检查是否有错误码
+            if (res.data.error_code) {
+              console.error('OCR API错误:', res.data.error_code, res.data.error_msg)
+              reject(new Error(`OCR识别失败: ${res.data.error_msg || res.data.error_code}`))
+              return
+            }
+
+            if (res.data.words_result && res.data.words_result.length > 0) {
               const text = res.data.words_result.map(item => item.words).join('\n')
+              console.log('OCR识别成功，文字数量:', res.data.words_result.length)
               resolve({ success: true, text })
             } else {
-              reject(new Error('OCR识别失败'))
+              console.warn('OCR响应中没有识别到文字')
+              resolve({ success: true, text: '' })
             }
           },
-          fail: reject
+          fail: (err) => {
+            console.error('OCR请求失败:', err)
+            reject(err)
+          }
         })
       })
     } catch (error) {
@@ -44,6 +62,7 @@ class APIManager {
   // 获取百度Access Token
   static async getBaiduAccessToken() {
     const config = app.globalData.apiConfig.baiduOCR
+    console.log('正在获取百度access_token...')
 
     return new Promise((resolve, reject) => {
       wx.request({
@@ -55,13 +74,19 @@ class APIManager {
           client_secret: config.secretKey
         },
         success: (res) => {
+          console.log('Token API响应:', res)
           if (res.data.access_token) {
+            console.log('获取access_token成功')
             resolve(res.data.access_token)
           } else {
-            reject(new Error('获取token失败'))
+            console.error('Token响应中没有access_token:', res.data)
+            reject(new Error(`获取token失败: ${res.data.error_description || res.data.error || '未知错误'}`))
           }
         },
-        fail: reject
+        fail: (err) => {
+          console.error('Token请求失败:', err)
+          reject(err)
+        }
       })
     })
   }

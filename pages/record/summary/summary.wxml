@@ -2,26 +2,25 @@
 <view class="container">
   <!-- 顶部标题 -->
   <view class="header">
-    <text class="header-title">长文总结</text>
-    <text class="header-subtitle">AI智能提取核心观点</text>
+    <text class="header-subtitle">{{summaryMode === 'brief' ? '快速浓缩长文，一句话看懂核心' : summaryMode === 'detailed' ? '深度解析内容，保留关键细节' : '结构化梳理，条理清晰呈现'}}</text>
   </view>
 
   <!-- 模式选择器 -->
   <view class="mode-selector">
     <view class="mode-current" bindtap="toggleModeSelector">
-      <text class="mode-label">{{getModeName()}}</text>
+      <text class="mode-label">{{summaryMode === 'brief' ? '简要总结' : summaryMode === 'detailed' ? '详细总结' : '要点提取'}}</text>
       <text class="mode-icon">{{showModeSelector ? '▲' : '▼'}}</text>
     </view>
     <view class="mode-options" wx:if="{{showModeSelector}}">
-      <view class="mode-option" bindtap="selectMode" data-mode="brief">
+      <view class="mode-option {{summaryMode === 'brief' ? 'active' : ''}}" bindtap="selectMode" data-mode="brief">
         <text class="option-name">简要总结</text>
         <text class="option-desc">提取核心内容，生成简短摘要</text>
       </view>
-      <view class="mode-option" bindtap="selectMode" data-mode="detailed">
+      <view class="mode-option {{summaryMode === 'detailed' ? 'active' : ''}}" bindtap="selectMode" data-mode="detailed">
         <text class="option-name">详细总结</text>
         <text class="option-desc">保留更多细节，全面概括</text>
       </view>
-      <view class="mode-option" bindtap="selectMode" data-mode="keypoints">
+      <view class="mode-option {{summaryMode === 'keypoints' ? 'active' : ''}}" bindtap="selectMode" data-mode="keypoints">
         <text class="option-name">要点提取</text>
         <text class="option-desc">列出关键要点，条理清晰</text>
       </view>
@@ -36,7 +35,7 @@
     </view>
     <textarea
       class="input-textarea"
-      placeholder="粘贴或输入需要总结的长文本内容..."
+      placeholder="{{summaryMode === 'brief' ? '粘贴长文，AI帮你提炼精华，快速掌握要义...' : summaryMode === 'detailed' ? '输入完整内容，AI将全面分析并保留重要细节...' : '输入文本，AI将提取关键要点，分条列出核心信息...'}}"
       value="{{inputText}}"
       bindinput="onTextInput"
       maxlength="{{maxLength}}"
@@ -104,13 +103,27 @@
 
   <!-- 使用提示 -->
   <view class="tips-section" wx:if="{{!summaryResult && !inputText}}">
-    <view class="tips-title">💡 使用提示</view>
-    <view class="tips-list">
-      <view class="tip-item">• 支持粘贴文章、报告、论文等长文本</view>
-      <view class="tip-item">• 自动检测剪贴板内容，快速导入</view>
-      <view class="tip-item">• 提供简要、详细、要点三种总结模式</view>
-      <view class="tip-item">• AI智能提取核心观点和关键信息</view>
-      <view class="tip-item">• 最多支持10000字的文本总结</view>
+    <view class="tips-title">💡 {{summaryMode === 'brief' ? '简要总结 - 适用场景' : summaryMode === 'detailed' ? '详细总结 - 适用场景' : '要点提取 - 适用场景'}}</view>
+    <view class="tips-list" wx:if="{{summaryMode === 'brief'}}">
+      <view class="tip-item">• 快速浏览新闻资讯，抓住核心信息</view>
+      <view class="tip-item">• 会议纪要精简，提炼关键决策</view>
+      <view class="tip-item">• 长篇文章速读，节省阅读时间</view>
+      <view class="tip-item">• 适合碎片化时间快速获取信息</view>
+      <view class="tip-item">• 生成简洁摘要，便于分享传播</view>
+    </view>
+    <view class="tips-list" wx:if="{{summaryMode === 'detailed'}}">
+      <view class="tip-item">• 学术论文研读，保留论证逻辑</view>
+      <view class="tip-item">• 技术文档整理，不遗漏关键细节</view>
+      <view class="tip-item">• 合同条款梳理，全面理解内容</view>
+      <view class="tip-item">• 深度报告分析，保持完整性</view>
+      <view class="tip-item">• 需要全面理解的重要文档</view>
+    </view>
+    <view class="tips-list" wx:if="{{summaryMode === 'keypoints'}}">
+      <view class="tip-item">• 学习笔记整理，分条记录知识点</view>
+      <view class="tip-item">• 产品需求文档，提取功能要点</view>
+      <view class="tip-item">• 演讲稿大纲，结构化呈现内容</view>
+      <view class="tip-item">• 复习资料准备，条理清晰便于记忆</view>
+      <view class="tip-item">• 需要结构化梳理的内容</view>
     </view>
   </view>
 </view>

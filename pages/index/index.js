@@ -8,9 +8,10 @@ Page({
     totalNotes: 0,
     todayNotes: 0,
     totalTags: 0,
-    showQuickRecord: false, // 快速录音弹窗
-    isQuickRecording: false, // 是否正在快速录音
-    quickRecordTime: 0 // 快速录音时长
+    showQuickRecord: false, // 快速待办弹窗
+    quickTodoContent: '', // 待办内容
+    quickRecordTime: '', // 记录时间
+    quickTodoTag: '待办' // 待办标签
   },
 
   onLoad() {
@@ -48,14 +49,6 @@ Page({
     })
   },
 
-  // 跳转到语音速记
-  goToVoiceRecord() {
-    if (!this.checkLogin()) return
-    wx.navigateTo({
-      url: '/pages/record/voice/voice'
-    })
-  },
-
   // 跳转到拍照记笔记
   goToPhotoRecord() {
     if (!this.checkLogin()) return
@@ -80,11 +73,11 @@ Page({
     })
   },
 
-  // 跳转到文档增强
-  goToDocument() {
+  // 跳转到模板笔记
+  goToTemplate() {
     if (!this.checkLogin()) return
     wx.navigateTo({
-      url: '/pages/record/document/document'
+      url: '/pages/record/template/template'
     })
   },
 
@@ -125,149 +118,89 @@ Page({
     })
   },
 
-  // 显示快速录音弹窗
+  // 显示快速待办弹窗
   showQuickRecordModal() {
     if (!this.checkLogin()) return
+
+    // 获取当前时间
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const day = String(now.getDate()).padStart(2, '0')
+    const hour = String(now.getHours()).padStart(2, '0')
+    const minute = String(now.getMinutes()).padStart(2, '0')
+    const timeStr = `${year}-${month}-${day} ${hour}:${minute}`
+
     this.setData({
       showQuickRecord: true,
-      isQuickRecording: false,
-      quickRecordTime: 0
+      quickTodoContent: '',
+      quickRecordTime: timeStr,
+      quickTodoTag: '待办'
     })
   },
 
-  // 隐藏快速录音弹窗
+  // 隐藏快速待办弹窗
   hideQuickRecordModal() {
-    if (this.isQuickRecording) {
-      wx.showModal({
-        title: '提示',
-        content: '正在录音中，确定要退出吗？',
-        success: (res) => {
-          if (res.confirm) {
-            this.stopQuickRecord()
-            this.setData({ showQuickRecord: false })
-          }
-        }
-      })
-    } else {
-      this.setData({ showQuickRecord: false })
-    }
-  },
-
-  // 开始快速录音
-  startQuickRecord() {
-    const recorderManager = wx.getRecorderManager()
-
-    wx.authorize({
-      scope: 'scope.record',
-      success: () => {
-        recorderManager.start({
-          duration: 60000,
-          format: 'mp3'
-        })
-
-        this.setData({
-          isQuickRecording: true,
-          quickRecordTime: 0
-        })
-
-        // 开始计时
-        this.quickRecordTimer = setInterval(() => {
-          this.setData({
-            quickRecordTime: this.data.quickRecordTime + 1
-          })
-        }, 1000)
-
-        // 录音结束回调
-        recorderManager.onStop((res) => {
-          clearInterval(this.quickRecordTimer)
-          this.handleQuickRecordComplete(res.tempFilePath)
-        })
-      },
-      fail: () => {
-        wx.showModal({
-          title: '需要录音权限',
-          content: '请在设置中开启录音权限',
-          success: (res) => {
-            if (res.confirm) {
-              wx.openSetting()
-            }
-          }
-        })
-      }
-    })
-  },
-
-  // 停止快速录音
-  stopQuickRecord() {
-    const recorderManager = wx.getRecorderManager()
-    recorderManager.stop()
-    clearInterval(this.quickRecordTimer)
     this.setData({
-      isQuickRecording: false
+      showQuickRecord: false,
+      quickTodoContent: ''
     })
   },
 
-  // 处理录音完成
-  async handleQuickRecordComplete(tempFilePath) {
-    wx.showLoading({ title: '正在识别...' })
+  // 阻止事件冒泡的空方法
+  doNothing() {
+    // 用于阻止弹窗内容区域的点击事件冒泡到背景层
+  },
 
-    try {
-      // 上传到云存储
-      const uploadResult = await wx.cloud.uploadFile({
-        cloudPath: `voice/${Date.now()}.mp3`,
-        filePath: tempFilePath
-      })
+  // 待办内容输入
+  onQuickTodoInput(e) {
+    this.setData({
+      quickTodoContent: e.detail.value
+    })
+  },
 
-      // 调用云函数识别
-      const result = await wx.cloud.callFunction({
-        name: 'voiceRecognition',
-        data: {
-          fileID: uploadResult.fileID
-        }
-      })
+  // 选择待办标签
+  selectQuickTodoTag(e) {
+    const tag = e.currentTarget.dataset.tag
+    this.setData({
+      quickTodoTag: tag
+    })
+  },
 
-      wx.hideLoading()
-
-      if (result.result.success) {
-        // 保存为灵感笔记
-        const note = {
-          title: `【灵感】${result.result.text.substring(0, 15)}...`,
-          content: result.result.text,
-          tag: '灵感',
-          keywords: ['灵感', '快速记录'],
-          type: 'quick-voice'
-        }
-
-        const savedNote = StorageManager.saveNote(note)
-
-        if (savedNote) {
-          wx.showToast({
-            title: '保存成功',
-            icon: 'success'
-          })
-          this.setData({ showQuickRecord: false })
-          this.loadData()
-        }
-      } else {
-        wx.showToast({
-          title: '识别失败',
-          icon: 'none'
-        })
-      }
-    } catch (error) {
-      wx.hideLoading()
+  // 保存快速待办
+  saveQuickTodo() {
+    if (!this.data.quickTodoContent || this.data.quickTodoContent.trim() === '') {
       wx.showToast({
-        title: '录音失败',
+        title: '请输入待办事项',
+        icon: 'none'
+      })
+      return
+    }
+
+    // 保存笔记
+    const note = {
+      title: this.data.quickTodoContent.substring(0, 20) + (this.data.quickTodoContent.length > 20 ? '...' : ''),
+      content: this.data.quickTodoContent,
+      tag: this.data.quickTodoTag,
+      keywords: [this.data.quickTodoTag, '任务'],
+      type: 'todo'
+    }
+
+    const savedNote = StorageManager.saveNote(note)
+
+    if (savedNote) {
+      wx.showToast({
+        title: '保存成功',
+        icon: 'success'
+      })
+      this.setData({ showQuickRecord: false })
+      this.loadData()
+    } else {
+      wx.showToast({
+        title: '保存失败',
         icon: 'none'
       })
     }
-  },
-
-  // 格式化时间显示
-  formatQuickTime(seconds) {
-    const min = Math.floor(seconds / 60)
-    const sec = seconds % 60
-    return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`
   },
 
   // 分享

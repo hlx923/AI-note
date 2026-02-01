@@ -1,7 +1,7 @@
 /* pages/note/list/list.wxss */
 .container {
   min-height: 100vh;
-  background: #F5F5F5;
+  background: linear-gradient(180deg, #E3F2FD 0%, #FFFFFF 30%);
   padding-bottom: 120rpx;
 }
 
@@ -9,30 +9,35 @@
   display: flex;
   align-items: center;
   background: #FFFFFF;
-  padding: 20rpx 30rpx;
-  margin-bottom: 20rpx;
+  padding: 16rpx 20rpx; /* 更紧凑的左右间距 */
+  margin-bottom: 16rpx;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
 }
 
 .tag-scroll {
   flex: 1;
   white-space: nowrap;
+  /* 确保滚动区域不被过滤按钮覆盖 */
+  min-width: 0;
 }
 
 .tag-list {
   display: inline-flex;
-  gap: 16rpx;
+  gap: 8rpx; /* 缩小标签间距 */
 }
 
 .tag-item {
   display: inline-block;
-  padding: 12rpx 24rpx;
+  padding: 8rpx 18rpx; /* 缩小内边距以节省空间 */
   background: #F5F5F5;
   color: #666;
-  border-radius: 20rpx;
-  font-size: 26rpx;
+  border-radius: 16rpx;
+  font-size: 24rpx; /* 略小字体 */
   white-space: nowrap;
-  transition: all 0.2s;
+  transition: all 0.15s;
+  max-width: 240rpx; /* 防止超长标签撑开布局 */
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .tag-item.active {
@@ -41,12 +46,59 @@
 }
 
 .filter-icon {
-  margin-left: 20rpx;
-  padding: 12rpx 20rpx;
+  margin-left: 12rpx;
+  padding: 8rpx 12rpx; /* 缩小按钮尺寸 */
   background: #F5F5F5;
-  border-radius: 20rpx;
-  font-size: 26rpx;
+  border-radius: 16rpx;
+  font-size: 24rpx;
   color: #666;
+  flex: 0 0 auto; /* 确保不被压缩 */
+}
+
+/* 溢出箭头 */
+.more-arrow {
+  margin-left: 8rpx;
+  padding: 8rpx 10rpx;
+  background: #F5F5F5;
+  border-radius: 14rpx;
+  font-size: 28rpx;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 溢出下拉 */
+.overflow-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+}
+
+.overflow-menu {
+  position: fixed;
+  left: 20rpx;
+  right: 20rpx;
+  top: 120rpx; /* 显示在筛选栏下方 */
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 12rpx;
+  box-shadow: 0 6rpx 20rpx rgba(0,0,0,0.12);
+  z-index: 1002;
+}
+
+.overflow-item {
+  padding: 12rpx 16rpx;
+  font-size: 26rpx;
+  color: #333;
+  border-bottom: 1rpx solid #F3F3F3;
+}
+
+.overflow-item:last-child {
+  border-bottom: none;
 }
 
 .note-list {
@@ -58,7 +110,8 @@
   border-radius: 16rpx;
   padding: 24rpx;
   margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2rpx 12rpx rgba(74, 144, 226, 0.1);
+  border-left: 4rpx solid #4A90E2;
   transition: transform 0.2s;
 }
 
